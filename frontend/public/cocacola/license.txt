@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cocacola
+* source:	https://sketchfab.com/3d-models/cocacola-00824239737b4a4098893c25562daa9b
+* author:	jeilocreativedesignworld (https://sketchfab.com/jeilocreativedesignworld)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cocacola" (https://sketchfab.com/3d-models/cocacola-00824239737b4a4098893c25562daa9b) by jeilocreativedesignworld (https://sketchfab.com/jeilocreativedesignworld) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

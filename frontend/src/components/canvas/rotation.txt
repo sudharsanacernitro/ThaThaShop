@@ -1,0 +1,6 @@
+cameraPosition
+7.80 3.05 5.65
+scenePosition
+-10.10 1.45 -1.75
+sceneRotation
+2.24 0.27 0.36

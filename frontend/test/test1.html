@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text with Border on SVG</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #222;
+        }
+
+        .container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .text {
+            font-size: 80px;
+            font-weight: bold;
+            fill: transparent; /* Makes the text transparent */
+            stroke: white; /* Border color */
+            stroke-width: 2px;
+            stroke-linejoin: round;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .svg-image {
+            display: block;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="svg-image" viewBox="0 0 400 400">
+            <!-- Replace this with your actual SVG image -->
+            <circle cx="200" cy="200" r="150" fill="blue"/>
+        </svg>
+        <svg width="400" height="400">
+            <text x="50%" y="50%" class="text">HELLO</text>
+        </svg>
+    </div>
+</body>
+</html>
