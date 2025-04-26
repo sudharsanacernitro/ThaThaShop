@@ -5,7 +5,7 @@ const requestProducerkafka = new Kafka({
   brokers: ['localhost:9092'], 
 });
 
-const requestProducer = requestProducerkafka.producer();
+const PipeIn = requestProducerkafka.producer();
 
 
 
@@ -15,4 +15,6 @@ const responseConsumerkafka = new Kafka({
     brokers: ['localhost:9092'], 
   });
   
-const responseConsumer = responseConsumerkafka.consumer({ groupId: 'PipelineOutput' });
+const PipeOut = responseConsumerkafka.consumer({ groupId: 'PipelineOutput' });
+
+module.exports = {PipeIn, PipeOut};

@@ -1,24 +1,38 @@
 const GraphQLJSON = require('graphql-type-json');
 
-const root = {
-  JSON: GraphQLJSON,
-  getDynamicInfo: async () => {
+const {PipeIn, PipeOut} = require('./pipeLine');
 
-    // return {
-    //   name: "Sudharsan",
-    //   age: 23,
-    //   location: {
-    //     city: "Chennai",
-    //     lat: 13.08,
-    //     lng: 80.27,
-    //   },
-    //   skills: ["Node.js", "Kafka", "Docker"],
-    //   timestamp: new Date().toISOString()
-    // };
 
-    
-    
+//Establishing connection to Kafka
+async function init() {
+    try {
+      await PipeIn.connect();
+      console.log('🚀 Input PipeLine connected');
+      await PipeOut.connect();
+      console.log('🚀 Output PipeLine connected');
+    } catch (err) {
+      console.error('Connection failed:', err.message);
+    }
   }
-};
+init();
+
+
+
+const root = {
+    JSON: GraphQLJSON,
+    getDynamicInfo: async (args, context) => {
+      const { req, res } = context;
+  
+      const clientIP = req.ip;
+      const customHeader = req.headers['x-custom-header'];
+  
+      return {
+        name: "Sudharsan",
+        ip: clientIP,
+        header: customHeader || "Header not set",
+        timestamp: new Date().toISOString()
+      };
+    }
+  };
 
 module.exports = root;

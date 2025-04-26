@@ -45,9 +45,10 @@ app.use('/images', express.static(path.join(__dirname, 'images'))); // to host i
 const schema = buildSchema(`
   scalar JSON
 
-  type Query {
-    getDynamicInfo: JSON
-  }
+ type Query {
+  getDynamicInfo(message: String): JSON
+}
+  
 `);
 
 
