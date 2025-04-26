@@ -36,7 +36,6 @@ app.use(session({
 
 
 // Routes
-
 app.use('/images', express.static(path.join(__dirname, 'images'))); // to host images
 
 
@@ -46,9 +45,9 @@ const schema = buildSchema(`
   scalar JSON
 
  type Query {
-  getDynamicInfo(message: String): JSON
+  getDynamicInfo( service: String , input: JSON): JSON
 }
-  
+
 `);
 
 

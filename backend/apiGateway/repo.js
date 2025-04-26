@@ -23,16 +23,34 @@ const root = {
     getDynamicInfo: async (args, context) => {
       const { req, res } = context;
   
+      // Access 'input' correctly from args
+      const { service , input } = args;
+    
       const clientIP = req.ip;
       const customHeader = req.headers['x-custom-header'];
-  
-      return {
+    
+      const data ={
         name: "Sudharsan",
         ip: clientIP,
         header: customHeader || "Header not set",
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        body: input, // This is the data passed in from the query
+        service: service,
       };
+
+      await PipeIn.send({
+        topic: `Request-${service}`, 
+        messages: [
+          { key: 'key1', value: 'Hello Sudharsan from Kafka!' },
+        ],
+      });
+    
+      console.log("✅ Message sent successfully");
+
+      return data;
     }
   };
+  
+  
 
 module.exports = root;
