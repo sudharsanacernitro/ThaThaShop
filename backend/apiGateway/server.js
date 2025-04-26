@@ -4,11 +4,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
 
+
+const root = require('./repo');
 
 const app = express();
 const PORT = 5000;
-require('./config/db'); 
+require('../config/db'); 
 // require('dotenv').config();
 
 // CORS middleware
@@ -35,14 +39,37 @@ app.use(session({
 
 app.use('/images', express.static(path.join(__dirname, 'images'))); // to host images
 
-const authRoutes = require('./routes/login');
-app.use('/api', authRoutes);
 
-const signupRoutes =require('./routes/signup');
-app.use('/api',signupRoutes);
 
-const subProductRoutes =require('./routes/subProduct');
-app.use('/api',subProductRoutes);
+// Schema
+const schema = buildSchema(`
+  scalar JSON
+
+  type Query {
+    getDynamicInfo: JSON
+  }
+`);
+
+
+
+// App
+app.use('/graphql', graphqlHTTP((req, res) => ({
+  schema,
+  rootValue: root,
+  graphiql: true,
+  context: { req, res }, // Pass req, res here
+})));
+
+
+
+// const authRoutes = require('./routes/login');
+// app.use('/api', authRoutes);
+
+// const signupRoutes =require('./routes/signup');
+// app.use('/api',signupRoutes);
+
+// const subProductRoutes =require('./routes/subProduct');
+// app.use('/api',subProductRoutes);
 
 
 
