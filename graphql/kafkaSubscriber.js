@@ -14,7 +14,7 @@ const run = async () => {
   await consumer.connect();
 
   // Subscribe to the topic
-  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true });
+  await consumer.subscribe({ topic: 'Request-home', fromBeginning: true });
 
   console.log('🚀 Consumer connected. Waiting for messages...');
 
@@ -22,11 +22,7 @@ const run = async () => {
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
       console.log(`📩 Received message:`);
-      console.log({
-        key: message.key?.toString(),
-        value: message.value.toString(),
-        partition,
-      });
+      console.log(message.value.toString());
     },
   });
 };

@@ -9,6 +9,7 @@ async function init() {
       await PipeIn.connect();
       console.log('🚀 Input PipeLine connected');
       await PipeOut.connect();
+      await consumer.subscribe({ topic: 'Response', fromBeginning: true });
       console.log('🚀 Output PipeLine connected');
     } catch (err) {
       console.error('Connection failed:', err.message);
@@ -41,9 +42,16 @@ const root = {
       await PipeIn.send({
         topic: `Request-${service}`, 
         messages: [
-          { key: 'key1', value: 'Hello Sudharsan from Kafka!' },
+          { value: JSON.stringify(input) },
         ],
-      });
+      }).then(() => {
+
+
+
+      }).catch((err) => {
+        console.error('Error sending message:', err);
+      }
+      );
     
       console.log("✅ Message sent successfully");
 
