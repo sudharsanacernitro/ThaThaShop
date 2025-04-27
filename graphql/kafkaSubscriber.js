@@ -1,28 +1,41 @@
 const { Kafka } = require('kafkajs');
 
-// Create a Kafka instance
 const kafka = new Kafka({
   clientId: 'my-consumer',
-  brokers: ['localhost:9092'], // Use your broker's address
+  brokers: ['localhost:9092'],
 });
 
-// Create a consumer instance
 const consumer = kafka.consumer({ groupId: 'test-group' });
+const producer = kafka.producer(); // <-- Create a producer also
 
 const run = async () => {
-  // Connect the consumer
   await consumer.connect();
+  await producer.connect(); // <-- Connect producer too
 
-  // Subscribe to the topic
-  await consumer.subscribe({ topic: 'Request-home', fromBeginning: true });
+  await consumer.subscribe({ topic: 'Request-home', fromBeginning: false });
 
   console.log('🚀 Consumer connected. Waiting for messages...');
 
-  // Handle incoming messages
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log(`📩 Received message:`);
-      console.log(message.value.toString());
+      const receivedMessage = message.value.toString();
+      console.log(`📩 Received message: ${receivedMessage}`);
+
+      // Process the message (your logic here)
+      const processedResult = receivedMessage;
+
+      // Send the result back to a new topic
+      await producer.send({
+        topic: 'Response', // Response topic
+        messages: [
+          { value: processedResult },
+        ],
+      });
+
+      console.log('✅ Sent response back to producer.');
+
+    
+      
     },
   });
 };

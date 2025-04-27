@@ -8,7 +8,7 @@ const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 
 
-const root = require('./repo');
+const root = require('./pipeLine');
 
 const app = express();
 const PORT = 5000;
