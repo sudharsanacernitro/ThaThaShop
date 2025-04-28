@@ -19,6 +19,6 @@
     "graphql-type-json": "^0.3.2",
     "kafkajs": "^2.2.4",
     "mongoose": "^8.13.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.10"
   }
 }

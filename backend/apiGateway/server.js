@@ -12,7 +12,7 @@ const root = require('./pipeLine');
 
 const app = express();
 const PORT = 5000;
-require('../config/db'); 
+// require('../config/db'); 
 // require('dotenv').config();
 
 // CORS middleware
@@ -45,7 +45,7 @@ const schema = buildSchema(`
   scalar JSON
 
  type Query {
-  getDynamicInfo( service: String , input: JSON): JSON
+  getDynamicInfo( subService: String , service: String , input: JSON): JSON
 }
 
 `);

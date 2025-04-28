@@ -1,5 +1,5 @@
 const GraphQLJSON = require('graphql-type-json');
-const { PipeIn, PipeOut } = require('./kafkaConfig');
+const { PipeIn, PipeOut } = require('./config/kafka');
 
 // Map to store resolvers for each request
 const pendingRequests = new Map();
@@ -8,6 +8,7 @@ const pendingRequests = new Map();
 async function init() {
   await PipeIn.connect();
   await PipeOut.connect();
+  console.log("PipeLine connected");
   await PipeOut.subscribe({ topic: 'Response', fromBeginning: false });
 
   await PipeOut.run({
@@ -42,10 +43,14 @@ function generateCorrelationId() {
 const root = {
   JSON: GraphQLJSON,
   getDynamicInfo: async (args) => {
-    const { service, input } = args;
+    const { subService ,service, input } = args;
     const correlationId = generateCorrelationId();
 
+    console.log(args);
+
+
     const kafkaRequest = {
+      subService,
       ...input,
       correlationId
     };
