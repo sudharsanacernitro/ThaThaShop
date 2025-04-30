@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
-import {Product ,Home ,Login, Signup , SubProduct } from './pages';
+import {Product ,Home ,Login, Signup , SubProduct ,Profile} from './pages';
 
 import 'swiper/css';
 
@@ -19,7 +19,8 @@ const App=()=> {
         <Route path="/subProduct" element={<SubProduct />} />
         <Route path="/login" element={<Login/>} />
         <Route path='/signup' element={<Signup/>} />
-        {/* <Route path="/contact" element={<Contact />} /> */}
+        <Route path='/profile' element={<Profile/>} />
+        
       </Routes>
      </BrowserRouter>
 
