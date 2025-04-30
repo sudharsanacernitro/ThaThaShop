@@ -1,9 +1,9 @@
-const authService = require('./controller');
+const authService = require('./controllers/auth');
 
 const splitter = async (action, payload) => {
   switch (action) {
     case 'signup':
-      return await authService.signup(payload);
+      return await authService.signup(payload.email , payload.password);
 
     case 'login':
       return await authService.login(payload.email, payload.password);

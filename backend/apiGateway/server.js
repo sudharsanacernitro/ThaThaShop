@@ -12,8 +12,9 @@ const root = require('./pipeLine');
 
 const app = express();
 const PORT = 5000;
-// require('../config/db'); 
-// require('dotenv').config();
+
+
+require('./utils/secretsLoader');  // To load secrets from vault
 
 // CORS middleware
 app.use(cors({
@@ -38,9 +39,7 @@ app.use(session({
 // Routes
 app.use('/images', express.static(path.join(__dirname, 'images'))); // to host images
 
-
-
-// Schema
+// Graphql Schema
 const schema = buildSchema(`
   scalar JSON
 
@@ -50,8 +49,6 @@ const schema = buildSchema(`
 
 `);
 
-
-
 // App
 app.use('/graphql', graphqlHTTP((req, res) => ({
   schema,
@@ -59,19 +56,6 @@ app.use('/graphql', graphqlHTTP((req, res) => ({
   graphiql: true,
   context: { req, res }, // Pass req, res here
 })));
-
-
-
-// const authRoutes = require('./routes/login');
-// app.use('/api', authRoutes);
-
-// const signupRoutes =require('./routes/signup');
-// app.use('/api',signupRoutes);
-
-// const subProductRoutes =require('./routes/subProduct');
-// app.use('/api',subProductRoutes);
-
-
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
