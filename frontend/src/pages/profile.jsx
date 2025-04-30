@@ -22,6 +22,10 @@ export default function ProfilePage() {
       {/* Left: User Info */}
       <div className="w-1/3 bg-white rounded-2xl shadow p-6 mr-6 z-20 ">
         <h2 className="text-2xl font-semibold mb-4">User Details</h2>
+        <img
+          src="user.png"
+          alt="User Avatar"
+          className="rounded-full mb-4" />
         <p><strong>Name:</strong> {user.name}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Phone:</strong> {user.phone}</p>
