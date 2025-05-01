@@ -1,62 +1,32 @@
 const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const path = require('path');
-
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
-
-
-const root = require('./pipeLine');
-
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const yaml = require('js-yaml');
+const fs = require('fs');
 const app = express();
-const PORT = 5000;
 
+const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
 
-require('./utils/secretsLoader');  // To load secrets from vault
+require('./utils/secretsLoader');
 
-// CORS middleware
-app.use(cors({
-  origin: 'http://localhost:3000', 
-  credentials: true              
-}));
+for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
+  const subServices = serviceConfig.subServices;
+  
+  console.log(`Setting up proxy for service: ${serviceName} on port ${serviceConfig.port}`);
 
-// Middlewares
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'eren139',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    secure: false,
-    maxAge: 1000 * 60 * 60 
+  for (const [routeName, { route, method }] of Object.entries(subServices)) {
+    console.log(`Setting up route for ${serviceName}: ${route} with method ${method}`);
+
+    app[method.toLowerCase()](
+      route,
+      createProxyMiddleware({
+        target: `http://localhost:${serviceConfig.port}`, 
+        changeOrigin: true,
+      })
+    );
   }
-}));
-
-
-// Routes
-app.use('/images', express.static(path.join(__dirname, 'images'))); // to host images
-
-// Graphql Schema
-const schema = buildSchema(`
-  scalar JSON
-
- type Query {
-  getDynamicInfo( subService: String , service: String , input: JSON): JSON
 }
 
-`);
-
-// App
-app.use('/graphql', graphqlHTTP((req, res) => ({
-  schema,
-  rootValue: root,
-  graphiql: true,
-  context: { req, res }, // Pass req, res here
-})));
-
+const PORT = 3000;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`API Gateway running at http://localhost:${PORT}`);
 });

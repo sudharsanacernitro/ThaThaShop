@@ -1,0 +1,35 @@
+routes:
+  auth:
+    port: 5001
+    subServices:
+      login:
+        route: /auth/login
+        method: POST
+
+      register:
+        route: /auth/register
+        method: POST
+
+      logout:
+        route: /auth/logout
+        method: POST
+
+      refresh:
+        route: /auth/refresh
+        method: POST
+
+      verify:
+        route: /auth/verify
+        method: POST
+
+      forgotPassword:
+        route: /auth/forgotPassword
+        method: POST
+
+      resetPassword:
+        route: /auth/resetPassword
+        method: POST
+
+      verifyEmail:
+        route: /auth/verifyEmail
+        method: POST
