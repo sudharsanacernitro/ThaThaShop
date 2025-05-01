@@ -10,7 +10,7 @@ async function loadSecrets() {
     const secretPath = 'secret/data/myapp/config'; // KV v2 format
     const result = await vault.read(secretPath);
     cachedSecrets = result.data.data; // Cache the secrets
-
+    console.log('✅ Secrets loaded from Vault:', cachedSecrets);
     process.env.MONGO_URI = cachedSecrets.MONGO_URI;
     process.env.JWT_SECRET = cachedSecrets.JWT_SECRET;
     process.env.JWT_REFRESH_SECRET = cachedSecrets.JWT_REFRESH_SECRET;

@@ -1,4 +1,4 @@
-const authService = require('./controllers/auth');
+const authService = require('../controllers/auth');
 
 const splitter = async (action, payload) => {
   switch (action) {

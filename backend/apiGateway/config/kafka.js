@@ -1,20 +1,13 @@
 const { Kafka } = require('kafkajs');
 
-const requestProducerkafka = new Kafka({
+const kafkaInstance = new Kafka({
   clientId: 'Gateway',
   brokers: ['localhost:9092'], 
 });
 
-const PipeIn = requestProducerkafka.producer();
+const PipeIn = kafkaInstance.producer();
 
-
-
-
-const responseConsumerkafka = new Kafka({
-    clientId: 'Gateway',
-    brokers: ['localhost:9092'], 
-  });
   
-const PipeOut = responseConsumerkafka.consumer({ groupId: 'PipelineOutput' });
+const PipeOut = kafkaInstance.consumer({ groupId: 'PipelineOutput' });
 
 module.exports = {PipeIn, PipeOut};
