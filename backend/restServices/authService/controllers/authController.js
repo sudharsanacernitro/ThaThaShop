@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 // Login controller
 async function login(req, res) {
   const { email, password } = req.body;
-
+  console.log("Login called");
   try {
     const user = await User.findOne({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {

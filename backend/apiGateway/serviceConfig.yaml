@@ -5,31 +5,52 @@ routes:
       login:
         route: /auth/login
         method: POST
+        description: "Endpoint for user login"
 
       register:
         route: /auth/register
         method: POST
+        description: "Endpoint for user registration"
 
       logout:
         route: /auth/logout
         method: POST
+        description: "Endpoint for user logout"
 
       refresh:
         route: /auth/refresh
         method: POST
+        description: "Endpoint for refreshing authentication token"
 
       verify:
         route: /auth/verify
         method: POST
+        description: "Endpoint for verifying user account"
 
       forgotPassword:
         route: /auth/forgotPassword
         method: POST
+        description: "Endpoint for initiating password reset"
 
       resetPassword:
         route: /auth/resetPassword
         method: POST
+        description: "Endpoint for setting a new password"
 
       verifyEmail:
         route: /auth/verifyEmail
         method: POST
+        description: "Endpoint for verifying user email"
+
+  product:
+    port: 5002
+    subServices:
+      list:
+        route: /product/list
+        method: POST
+        description: "Endpoint to list products"
+
+      getProduct:
+        route: /product/:id
+        method: GET
+        description: "Endpoint to get a specific product"

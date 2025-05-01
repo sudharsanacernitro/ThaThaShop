@@ -6,6 +6,12 @@ const app = express();
 
 const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
 
+const cors = require('cors');
+
+app.use(cors({ origin: 'http://localhost:3000' ,
+              credentials: true, 
+                }));
+
 require('./utils/secretsLoader');
 
 for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
@@ -26,7 +32,7 @@ for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
   }
 }
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`API Gateway running at http://localhost:${PORT}`);
 });

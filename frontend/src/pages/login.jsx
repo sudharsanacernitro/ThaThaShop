@@ -20,10 +20,10 @@ const LoginPage = () => {
     e.preventDefault();
     console.log("Login clicked:", { email, password });
 
-    const response = await fetch('http://localhost:5000/api/login', {
+    const response = await fetch('http://localhost:5000/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', //  session cookies
+      // credentials: 'include', //  session cookies
       body: JSON.stringify({ email, password })
     });
 
@@ -42,7 +42,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-700 ">
+    <div className="flex items-center justify-center min-h-screen bg-black ">
        
       
 

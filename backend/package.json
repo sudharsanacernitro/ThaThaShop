@@ -19,6 +19,7 @@
     "express-session": "^1.18.1",
     "graphql": "^15.8.0",
     "graphql-type-json": "^0.3.2",
+    "http-proxy-middleware": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "kafkajs": "^2.2.4",
     "mongoose": "^8.13.2",
