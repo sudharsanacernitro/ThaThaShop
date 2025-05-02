@@ -1,5 +1,14 @@
 version: '3'
+
 services:
+  # MongoDB setup
+  mongo:
+    image: mongo
+    container_name: my-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
 
   # Zookeeper setup
   zookeeper:
@@ -33,3 +42,6 @@ services:
     cap_add:
       - IPC_LOCK
     command: vault server -dev
+
+volumes:
+  mongodata:
