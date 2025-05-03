@@ -43,5 +43,43 @@ services:
       - IPC_LOCK
     command: vault server -dev
 
+
+    # Micro-services 
+
+  apigateway:
+    build:
+      context: ./apiGateway
+      dockerfile: Dockerfile
+    container_name: thathashop_apiGateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - vault
+      - authservice
+      - productservice
+
+  authservice:
+    build:
+      context: ./restServices/authService
+      dockerfile: Dockerfile
+    container_name: thathashop_authService
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+      - vault
+
+  productservice:
+    build:
+      context: ./restServices/productService
+      dockerfile: Dockerfile
+    container_name: thathashop_productService
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+      - vault
+    
 volumes:
   mongodata:

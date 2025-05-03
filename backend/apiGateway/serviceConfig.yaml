@@ -1,6 +1,7 @@
 routes:
   auth:
     port: 5001
+    IP: "authservice"
     subServices:
       login:
         route: /auth/login
@@ -44,6 +45,7 @@ routes:
 
   product:
     port: 5002
+    IP: "productservice"
     subServices:
       list:
         route: /product/list
@@ -51,6 +53,6 @@ routes:
         description: "Endpoint to list products"
 
       getProduct:
-        route: /product/:id
+        route: /product/id/:id
         method: GET
         description: "Endpoint to get a specific product"

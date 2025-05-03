@@ -17,12 +17,11 @@ const SignupPage = () => {
     const response = await fetch('http://localhost:5000/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // important for session cookies
       body: JSON.stringify({ email, password })
     });
 
     const data = await response.json();
-    if (response.status === 200) {  
+    if (response.status === 201) {  
       navigate('/'); // 👈 Redirect to dashboard
 
     } else {

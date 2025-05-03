@@ -12,5 +12,4 @@ const logger = winston.createLogger({
   ]
 });
 
-logger.info('Server started successfully');
-logger.error('Something went wrong!');
+module.exports = logger;

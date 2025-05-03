@@ -11,6 +11,7 @@ app.use(express.json());
 
 const prodcutRoutes = require('./routes/prodcutRoutes');
 app.use('/product', prodcutRoutes);
+app.get('/health', (req, res) => res.send('OK'));
 
 
 async function init() {
