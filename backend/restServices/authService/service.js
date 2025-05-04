@@ -5,8 +5,15 @@ const cors = require('cors');
 const { loadSecrets } = require('./utils/vaultClient');
 const connectDB = require('./config/db');
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
+
 app.use(express.json());
+
+const cookieParser = require('cookie-parser');
+app.use(cookieParser()); // 👈 Add this before your routes
 
 
 const authRoutes = require('./routes/authRoutes');

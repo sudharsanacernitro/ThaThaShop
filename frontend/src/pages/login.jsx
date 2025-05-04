@@ -23,17 +23,21 @@ const LoginPage = () => {
     const response = await fetch('http://localhost:5000/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      // credentials: 'include', //  session cookies
+      credentials: 'include', //  session cookies
       body: JSON.stringify({ email, password })
     });
 
     if (response.status === 200) {  
-
-
+      const data = await response.json(); // Parse response body
+      const token = data.token;
+  
+      console.log("Received token:", token);
+      // sessionStorage.setItem('token', token);
+  
       dispatch(setUserName(email));
-      dispatch(toggleLogin);
-
-      navigate('/'); 
+      dispatch(toggleLogin());
+  
+      navigate('/');
 
     } else {
       window.alert("Invalid credentials");

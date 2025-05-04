@@ -38,8 +38,8 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/delivery" className="text-white font-medium cursor-pointer">
-              Orders
+            <Link to="/cart" className="text-white font-medium cursor-pointer">
+              Cart
             </Link>
           </li>
           <li>

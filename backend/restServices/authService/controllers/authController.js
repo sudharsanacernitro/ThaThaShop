@@ -18,7 +18,14 @@ async function login(req, res) {
       { expiresIn: '1h' }
     );
 
-    return res.status(200).json({ success: true, token });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'Lax',
+      maxAge: 3600000
+    });
+
+    return res.status(200).json({ success: true, token:token });
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   }

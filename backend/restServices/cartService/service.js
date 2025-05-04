@@ -7,10 +7,13 @@ const connectDB = require('./config/db');
 
 app.use(cors());
 app.use(express.json());
+const cookieParser = require('cookie-parser');
+app.use(cookieParser()); // 👈 Add this before your routes
 
-
-const prodcutRoutes = require('./routes/prodcutRoutes');
+const prodcutRoutes = require('./routes/cartRoutes');
 app.use('/product', prodcutRoutes);
+
+
 
 
 async function init() {

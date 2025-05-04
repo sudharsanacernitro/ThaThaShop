@@ -4,7 +4,9 @@ const { getProductsByCategory,getProductById} = require('../controllers/prodcutC
 
 const authenticateToken = require('../middleware/auth');
 
-router.post('/list', authenticateToken,getProductsByCategory);
-router.get('/:id', authenticateToken, getProductById);
+router.post('/add', authenticateToken,getProductsByCategory);
+router.post('/del', authenticateToken, getProductById);
+router.get('/list', authenticateToken, getProductById);
+
 
 module.exports = router;

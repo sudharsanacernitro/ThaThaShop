@@ -3,7 +3,7 @@ import Product from './product';
 import SubProduct from './subProduct';
 import Login from './login';
 import Signup from './signup';
-import Profile from './profile';
+import Cart from './cart';
 
 export {
   Home,
@@ -11,5 +11,5 @@ export {
   SubProduct,
   Login,
   Signup,
-  Profile
+  Cart
 }

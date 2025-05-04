@@ -4,7 +4,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const app = express();
 const cors = require('cors');
-
+const path=require('path');
 const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
 const logger = require('./logging'); // Your custom logger
 
@@ -13,7 +13,11 @@ app.use(cors({
   credentials: true,
 }));
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 require('./utils/secretsLoader');
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Setup proxy with error logging
 for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {

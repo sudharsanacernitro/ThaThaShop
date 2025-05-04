@@ -8,20 +8,68 @@ function SubProduct() {
   const { category } = location.state || {};
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+useEffect(() => {
+  if (category) {
+    const token = localStorage.getItem('jwtToken'); // assuming the JWT is stored in localStorage
 
-  useEffect(() => {
-    if (category) {
-      fetch(`http://localhost:5000/api/category/${category}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to fetch products');
-          }
-          return response.json();
-        })
-        .then((data) => setProducts(data))
-        .catch((error) => console.error('Error fetching products:', error));
-    }
-  }, [category]);
+    fetch('http://localhost:5000/product/list', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ 'categoryName': category }) // Send category in body
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        return response.json();
+      })
+      .then((data) => {
+            console.log(data); // ✅ Already done
+            if (Array.isArray(data.data)) {
+              setProducts(data.data); // ✅ Use the correct path to array
+            } else {
+              console.error('Expected product array at data.data, got:', data);
+            }
+          })
+      .catch((error) => console.error('Error fetching products:', error));
+  }
+}, [category]);
+
+
+const [itemCount, setItemCount] = useState(10); 
+
+const incrementCount = () => setItemCount((prev) => prev + 10);
+const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10));
+
+ async function addToCart(id)
+  {
+    fetch('http://localhost:5000/product/list', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ 'categoryName': category }) // Send category in body
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        return response.json();
+      })
+      .then((data) => {
+            console.log(data); // ✅ Already done
+            if (Array.isArray(data.data)) {
+              setProducts(data.data); // ✅ Use the correct path to array
+            } else {
+              console.error('Expected product array at data.data, got:', data);
+            }
+          })
+      .catch((error) => console.error('Error fetching products:', error));
+  }
 
   return (
     <div className='z-20 relative'>
@@ -35,7 +83,7 @@ function SubProduct() {
               onClick={() => setSelectedProduct(product)}
             >
               <img
-                src={`http://localhost:5000/images/${category}/${product.image}`}
+                src={`${product.image}`}
                 alt={product.name}
                 className='size-96 rounded-2xl'
               />
@@ -57,31 +105,59 @@ function SubProduct() {
 
       {/* Modal */}
       {selectedProduct && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
-          <div className='bg-gray-600 rounded-2xl p-8 w-[50%]  relative'>
-            <button
-              onClick={() => setSelectedProduct(null)}
-              className='absolute top-2 right-2 text-xl font-bold text-red-600'
-            >
-              &times;
-            </button>
-            <img
-              src={`http://localhost:5000/images/${category}/${selectedProduct.image}`}
-              alt={selectedProduct.name}
-              className='size-[500px] object-cover rounded-xl mb-4 '
-            />
-            <h2 className='text-3xl font-bold mb-2 uppercase'>
-              {selectedProduct.name}
-            </h2>
-            <p className='text-xl text-gray-800 mb-2'>
-              Price: ${selectedProduct.price}
-            </p>
-            <p className='text-md text-gray-600'>
-              {/* You can add more detailed product info here */}
-              Description goes here...
-            </p>
-          </div>
-        </div>
+       <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
+       <div className='bg-gray-800 rounded-2xl p-8 w-[50%] relative flex'>
+         <button
+           onClick={() => setSelectedProduct(null)}
+           className='absolute top-2 right-2 text-xl font-bold text-red-600'
+         >
+           &times;
+         </button>
+     
+         <img
+           src={`${selectedProduct.image}`}
+           alt={selectedProduct.name}
+           className='size-[500px] object-cover rounded-xl mb-4'
+         />
+     
+         <div className='flex flex-col justify-start items-center w-[50%]'>
+           <div className='flex justify-center items-center flex-col w-full'>
+             <h1 className='font-[1000] text-[100px] uppercase text-yellow-300'>10%</h1>
+             <h1 className='font-[700] text-[20px] uppercase'>Discount on bulk order</h1>
+           </div>
+     
+           <div className='mt-10 flex justify-start items-center flex-col w-full'>
+             <h2 className='text-7xl font-bold mb-2 uppercase'>{selectedProduct.name}</h2>
+             <p className='text-xl text-white mb-2'>Price: ${selectedProduct.price}</p>
+             <p className='text-md text-gray-600'>Description goes here...</p>
+     
+             {/* Quantity Selector */}
+             <div className='flex items-center gap-4 mt-6'>
+               <button
+                 onClick={decrementCount}
+                 className='bg-red-500 text-white px-3 py-1 rounded-lg text-xl'
+               >
+                 −
+               </button>
+               <span className='text-white text-xl'>{itemCount}</span>
+               <button
+                 onClick={incrementCount}
+                 className='bg-green-500 text-white px-3 py-1 rounded-lg text-xl'
+               >
+                 +
+               </button>
+             </div>
+     
+             <div className='flex justify-around mt-6 w-full'>
+               <button className='bg-blue-500 text-white px-4 py-2 rounded-lg' onClick={async() => await addToCart(selectedProduct._id)}>
+                 Add to Cart
+               </button>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+     
       )}
     </div>
   );
