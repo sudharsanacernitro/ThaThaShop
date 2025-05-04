@@ -44,30 +44,23 @@ const [itemCount, setItemCount] = useState(10);
 const incrementCount = () => setItemCount((prev) => prev + 10);
 const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10));
 
- async function addToCart(id)
+ async function addToCart(productId,price)
   {
-    fetch('http://localhost:5000/product/list', {
+    fetch('http://localhost:5000/cart/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ 'categoryName': category }) // Send category in body
+      body: JSON.stringify({ 'productId': productId , 'quantity' : itemCount ,'price':price}) // Send category in body
     })
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        return response.json();
+        
+        window.alert("Added to cart");
       })
-      .then((data) => {
-            console.log(data); // ✅ Already done
-            if (Array.isArray(data.data)) {
-              setProducts(data.data); // ✅ Use the correct path to array
-            } else {
-              console.error('Expected product array at data.data, got:', data);
-            }
-          })
       .catch((error) => console.error('Error fetching products:', error));
   }
 
@@ -149,7 +142,7 @@ const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10)
              </div>
      
              <div className='flex justify-around mt-6 w-full'>
-               <button className='bg-blue-500 text-white px-4 py-2 rounded-lg' onClick={async() => await addToCart(selectedProduct._id)}>
+               <button className='bg-blue-500 text-white px-4 py-2 rounded-lg' onClick={async() => await addToCart(selectedProduct._id,selectedProduct.price)}>
                  Add to Cart
                </button>
              </div>

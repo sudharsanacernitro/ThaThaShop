@@ -1,10 +1,35 @@
 import { useState } from "react";
 import { ChevronDown, Search, User, X } from "lucide-react";
 import { Navbar} from "../components";
+import { useEffect } from 'react';
 
 export default function CheckoutPage() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [checkedItems, setCheckedItems] = useState({});
 
+  useEffect(() => {
+    fetch(`http://localhost:5000/cart/list`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials:"include"
+    })
+    .then(res => res.json())
+    .then(data => {setCartItems(data);
+      console.log(data);
+    })
+    .catch(err => console.error('Failed to load cart', err));
+  },[]);
+
+  const handleCheckboxChange = (productId) => {
+    setCheckedItems(prev => ({
+      ...prev,
+      [productId]: !prev[productId]
+    }));
+  };
+  
   return (
     <div className="bg-black text-white min-h-screen z-20">
       
@@ -48,14 +73,11 @@ export default function CheckoutPage() {
               />
             </div>
             <div className="flex items-center mb-4">
-              <input 
-                type="checkbox" 
-                id="remember" 
-                className="mr-2"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
+            <input 
+                type="email" 
+                placeholder="Your mobile number" 
+                className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
               />
-              <label htmlFor="remember" className="text-gray-300">Remember me</label>
             </div>
             <div className="border-b border-gray-700 mb-6"></div>
           </div>
@@ -81,17 +103,7 @@ export default function CheckoutPage() {
                 />
               </div>
             </div>
-            <div className="mb-4 z-20">
-              <label className="block mb-2">Country</label>
-              <div className="relative">
-                <select className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4 appearance-none">
-                  <option>Choose country/region</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
-                  <ChevronDown size={18} />
-                </div>
-              </div>
-            </div>
+           
             <div className="mb-4">
               <label className="block mb-2">Address</label>
               <input 
@@ -109,7 +121,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div className="w-full md:w-1/3 px-2 mb-4">
-                <label className="block mb-2">State</label>
+                <label className="block mb-2">District</label>
                 <input 
                   type="text" 
                   className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
@@ -131,63 +143,43 @@ export default function CheckoutPage() {
           <h2 className="text-xl font-bold tracking-widest mb-6">DETAIL PRODUCT</h2>
           
           {/* Product 1 */}
-          <div className="bg-gray-900 rounded mb-4 p-4 flex items-center">
-            <div className="mr-4">
-              <div className="bg-gray-800 rounded-full h-16 w-16 flex items-center justify-center">
-                <div className="bg-gray-700 rounded-full h-12 w-12"></div>
+          {cartItems.map((item) => (
+            <div key={item._id} className="bg-gray-900 rounded mb-4 p-4 flex items-center">
+              <div className="flex flex-col space-y-2 mr-4">
+                  <button
+                    className="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-700"
+                    onClick={() => handleBuy(item._id)}
+                  >
+                    Buy
+                  </button>
+                  <button
+                    className="bg-red-600 text-white text-xs px-3 py-1 rounded hover:bg-red-700"
+                    onClick={() => handleDelete(item._id)}
+                  >
+                    Delete
+                  </button>
               </div>
-            </div>
-            <div className="flex-grow">
-              <p className="text-sm text-gray-400">Protection</p>
-              <h3 className="text-lg font-bold tracking-widest">GIRO HELIOS</h3>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className="text-xs">1X</span>
-              <span className="text-xl font-bold">$215.00</span>
-            </div>
-          </div>
-          
-          {/* Product 2 */}
-          <div className="bg-gray-900 rounded mb-6 p-4 flex items-center">
-            <div className="mr-4">
-              <div className="bg-red-600 h-16 w-16 flex items-center justify-center">
+
+              <div className="mr-4">
+                <img
+                  src={item.product.image}
+                  alt={item.product.name}
+                  className="h-16 w-16 rounded-full object-cover"
+                />
               </div>
+              <div className="flex-grow">
+                <p className="text-sm text-gray-400">{item.product.category || 'Category'}</p>
+                <h3 className="text-lg font-bold tracking-widest">{item.product.name}</h3>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-xs">{item.quantity}X</span>
+                <span className="text-xl font-bold">${item.product.price}</span>
+              </div>
+              
             </div>
-            <div className="flex-grow">
-              <p className="text-sm text-gray-400">Jersey</p>
-              <h3 className="text-lg font-bold tracking-widest">ENDURA FS260</h3>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className="text-xs">1X</span>
-              <span className="text-xl font-bold">$64.00</span>
-            </div>
-          </div>
+         ))}
+  
           
-          {/* Order Summary */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold tracking-widest">SUB TOTAL</h3>
-              <span className="text-xl font-bold">$279.00</span>
-            </div>
-            <div className="border-b border-gray-700 mb-4"></div>
-          </div>
-          
-          {/* Shipping */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold tracking-widest">SHIPPING</h3>
-              <span className="text-gray-400">ENTER SHIPPING ADDRESS</span>
-            </div>
-            <div className="border-b border-gray-700 mb-4"></div>
-          </div>
-          
-          {/* Total */}
-          <div>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold tracking-widest">TOTAL</h3>
-              <span className="text-xl font-bold">$279.00</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

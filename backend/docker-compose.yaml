@@ -80,6 +80,19 @@ services:
     depends_on:
       - mongo
       - vault
-    
+  
+  cartservice:
+    build:
+      context: ./restServices/cartService
+      dockerfile: Dockerfile
+    container_name: thathashop_cartService
+    ports:
+      - "5003:5003"
+    depends_on:
+      - mongo
+      - vault
+      - productservice
+
+      
 volumes:
   mongodata:

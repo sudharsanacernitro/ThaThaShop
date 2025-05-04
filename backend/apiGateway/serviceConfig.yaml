@@ -56,3 +56,25 @@ routes:
         route: /product/id/:id
         method: GET
         description: "Endpoint to get a specific product"
+
+  cart:
+    port: 5003
+    IP: "cartservice"
+    subServices:
+
+      addItems:
+        route: /cart/add
+        method: POST
+        description: "Endpoint to add items to the cart"
+
+      delItem:
+        route: /cart/del
+        method: POST
+        description: "Endpoint to del item in the cart"
+
+      listItems:
+        route: /cart/list
+        method: GET
+        description: "Endpoint to list items from the cart"
+
+      

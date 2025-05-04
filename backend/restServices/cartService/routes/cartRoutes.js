@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getProductsByCategory,getProductById} = require('../controllers/prodcutController');
-
+const { addToCart, deleteFromCart, listCartItems } = require('../controllers/cartController');
 const authenticateToken = require('../middleware/auth');
 
-router.post('/add', authenticateToken,getProductsByCategory);
-router.post('/del', authenticateToken, getProductById);
-router.get('/list', authenticateToken, getProductById);
+router.post('/add', authenticateToken,addToCart);
+router.post('/del', authenticateToken, deleteFromCart);
+router.get('/list', authenticateToken, listCartItems);
 
 
 module.exports = router;
