@@ -30,6 +30,28 @@ export default function CheckoutPage() {
     }));
   };
   
+
+  const handleBuy = (item) => {
+    // Logic to buy item
+    console.log("Buying", item.product.name);
+    // Optionally send to server
+  };
+  
+  const handleDelete = (itemId) => {
+    fetch(`http://localhost:5000/cart/del/${itemId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+      .then(res => {
+        if (res.ok) {
+          setCartItems(prev => prev.filter(item => item._id !== itemId));
+        } else {
+          console.error('Delete failed');
+        }
+      })
+      .catch(err => console.error('Delete error', err));
+  };
+  
   return (
     <div className="bg-black text-white min-h-screen z-20">
       

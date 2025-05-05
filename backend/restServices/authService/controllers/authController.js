@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
+const {sendEmailMessage} = require('../utils/emailHandler');
 
 // Login controller
 async function login(req, res) {
@@ -24,6 +25,15 @@ async function login(req, res) {
       sameSite: 'Lax',
       maxAge: 3600000
     });
+
+    const emailPayload = {
+      to: user.email,
+      subject: 'Login Notification',
+      text: 'You have successfully logged in.',
+      html: `<p>You have successfully logged in.</p>`,
+    };
+    
+    sendEmailMessage(emailPayload);
 
     return res.status(200).json({ success: true, token:token });
   } catch (err) {
