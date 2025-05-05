@@ -39,8 +39,8 @@ routes:
         description: "Endpoint for setting a new password"
 
       verifyEmail:
-        route: /auth/verifyEmail
-        method: POST
+        route: /auth/verifyEmail/:userId
+        method: GET
         description: "Endpoint for verifying user email"
 
   product:

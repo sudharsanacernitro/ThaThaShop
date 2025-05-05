@@ -2,10 +2,11 @@ const { Kafka } = require('kafkajs');
 
 const kafka = new Kafka({
   clientId: 'my-consumer',
-  brokers: ['localhost:9092'],
+  brokers: ['kafka:9092'],
+  retry: {
+    retries: 5, // Set maximum retry attempts to 5
+  },
 });
 
-const consumer = kafka.consumer({ groupId: 'test-group' });
-const producer = kafka.producer();
 
-module.exports = { kafka, consumer, producer };
+module.exports = kafka;

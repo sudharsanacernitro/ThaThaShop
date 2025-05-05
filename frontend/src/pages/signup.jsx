@@ -22,7 +22,7 @@ const SignupPage = () => {
 
     const data = await response.json();
     if (response.status === 201) {  
-      navigate('/'); // 👈 Redirect to dashboard
+      // navigate('/'); // 👈 Redirect to dashboard
 
     } else {
 
