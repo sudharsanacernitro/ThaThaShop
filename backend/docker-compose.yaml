@@ -13,6 +13,8 @@ services:
   # Zookeeper setup
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
@@ -45,6 +47,26 @@ services:
 
 
 # Micro-services 
+
+  #kafkaservices
+  emailservice:
+    build:
+      context: ./kafkaServices/email
+      dockerfile: Dockerfile
+    container_name: thathashop_emailService
+    depends_on:
+      - kafka
+      - zookeeper
+
+  # loggingservice:
+  #   build:
+  #     context: ./kafkaServices/logging
+  #     dockerfile: Dockerfile
+  #   container_name: thathashop_loggingService
+  #   depends_on:
+  #     - kafka
+  #     - zookeeper
+
   #restServices
   apigateway:
     build:
@@ -67,8 +89,12 @@ services:
     ports:
       - "5001:5001"
     depends_on:
+      - kafka
       - mongo
       - vault
+      # - loggingservice
+      - emailservice
+      
 
   productservice:
     build:
@@ -78,8 +104,12 @@ services:
     ports:
       - "5002:5002"
     depends_on:
+      - kafka
       - mongo
       - vault
+      # - loggingservice
+      - emailservice
+      
   
   cartservice:
     build:
@@ -89,19 +119,14 @@ services:
     ports:
       - "5003:5003"
     depends_on:
+      - kafka
       - mongo
       - vault
+      # - loggingservice
+      - emailservice
       - productservice
 
-  #kafkaservices
-  emailservice:
-    build:
-      context: ./kafkaServices/email
-      dockerfile: Dockerfile
-    container_name: thathashop_emailService
-    depends_on:
-      - kafka
-      - zookeeper
+  
 
       
 volumes:

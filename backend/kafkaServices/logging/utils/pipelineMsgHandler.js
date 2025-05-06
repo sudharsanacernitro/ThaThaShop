@@ -5,6 +5,8 @@ module.exports = async function handleMessage({ topic, partition, message }) {
   const receivedMessage = message.value.toString();
   const processedResult = JSON.parse(receivedMessage);
 
+  console.log('[logging Service] - Received message:', processedResult);
+
    
   const logger = createLogger(processedResult.serviceName);
 
@@ -27,5 +29,5 @@ module.exports = async function handleMessage({ topic, partition, message }) {
       break;
   }
 
-  console.log('✅ Sent response back to producer.');
+  console.log('Logging message processed:', processedResult.message);
 };

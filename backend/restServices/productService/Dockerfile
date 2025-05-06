@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5002
 
 # Run the app
-CMD ["node", "service.js"]
+CMD ["sh", "-c", "sleep 60 && node service.js"]

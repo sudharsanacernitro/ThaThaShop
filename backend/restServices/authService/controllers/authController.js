@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const {sendEmailMessage} = require('../utils/emailHandler');
+const { logging } = require('../utils/logging');
+const { logLevel } = require('kafkajs');
+
 
 // Login controller
 async function login(req, res) {
@@ -11,10 +14,13 @@ async function login(req, res) {
     const user = await User.findOne({ email });
 
     if (!user || !(await bcrypt.compare(password, user.password) )) {
+
+      logging({ message: `[Login failed]${email}- Invalid username or password`,logLevel: 1});
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
     if(user.isVerified === false) {
+      logging({ message: `[Login failed]${email}- user not verified`,logLevel: 1});
       return res.status(401).json({ success: false, message: "Email not verified" });
     }
 
@@ -32,11 +38,14 @@ async function login(req, res) {
       maxAge: 3600000
     });
 
-   
-
+    logging({ message: `[Login success]${email}- ${user._id}`,logLevel: 0});
     return res.status(200).json({ success: true });
+
   } catch (err) {
+
+    logging({ message: `[Login failed]${email}- ${err.message}`,logLevel: 2});
     return res.status(500).json({ success: false, message: err.message });
+
   }
 }
 
@@ -64,12 +73,14 @@ async function signup(req, res) {
     
     sendEmailMessage(emailPayload);
     
+    logging({ message: `[Signup success]${email}- ${user._id}`,logLevel: 0});
     return res.status(201).json({
       success: true,
       message: 'Signup successful. Verification email sent.',
     });
 
   } catch (err) {
+    logging({ message: `[Signup failed]${email}- ${err.message}`,logLevel: 2});
     return res.status(500).json({ success: false, message: err.message });
   }
 }

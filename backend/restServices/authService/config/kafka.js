@@ -8,5 +8,5 @@ const kafka = new Kafka({
   },
 });
 
-
-module.exports = kafka;
+const producer = kafka.producer();
+module.exports = producer;

@@ -7,7 +7,7 @@ const run = async () => {
   try {
 
     await consumer.connect();
-    await consumer.subscribe({ topic: 'Service-email', fromBeginning: false });
+    await consumer.subscribe({ topic: 'Service-logging', fromBeginning: false });
 
     console.log('🚀 Consumer connected. Waiting for messages...');
 
@@ -17,4 +17,5 @@ const run = async () => {
   }
 };
 
+// setTimeout(run, 60000);
 run();

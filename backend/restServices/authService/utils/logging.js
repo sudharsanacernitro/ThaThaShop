@@ -1,13 +1,15 @@
 const producer = require('../config/kafka');
 
 
-const sendEmailMessage = async (message) => {
+const logging = async (message) => {
+
+  message.serviceName = "authService";
   try {
     await producer.connect();
     console.log('✅ Producer connected.');
 
     await producer.send({
-      topic: 'Service-email',
+      topic: 'Service-logging',
       messages: [
         {
           key: 'email',
@@ -16,7 +18,7 @@ const sendEmailMessage = async (message) => {
       ],
     });
 
-    console.log('📨 Email message sent to Kafka topic.');
+    console.log('📨 logging done');
   } catch (err) {
     console.error('❌ Error in producer:', err);
   } finally {
@@ -25,5 +27,5 @@ const sendEmailMessage = async (message) => {
 };
 
 module.exports = {
-  sendEmailMessage,
+  logging,
 };

@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "node-vault": "^0.10.2",
-    "nodemailer": "^6.10.1",
-    "winston": "^3.17.0"
-  }
-}
