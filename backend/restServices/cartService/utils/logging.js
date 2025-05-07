@@ -3,7 +3,7 @@ const producer = require('../config/kafka');
 
 const logging = async (message) => {
 
-  message.serviceName = "authService";
+  message.serviceName = "cartService";
   try {
     await producer.connect();
     console.log('✅ Producer connected.');
@@ -12,7 +12,7 @@ const logging = async (message) => {
       topic: 'Service-logging',
       messages: [
         {
-          // key: 'email',
+        //   key: 'email',
           value: JSON.stringify(message),
         },
       ],

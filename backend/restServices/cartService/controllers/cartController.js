@@ -1,11 +1,14 @@
 const Cart = require('../models/cartModel');
 const fetch = require('node-fetch');
+const {logging} = require('../utils/logging');
 
 exports.addToCart = async (req, res) => {
 
   console.log(req.user);
 
   const userId = req.user.id;
+  const email = req.user.email;
+
   const { productId , quantity , price} = req.body;
 
   try {
@@ -18,8 +21,13 @@ exports.addToCart = async (req, res) => {
     }
 
     await cartItem.save();
+
+    logging({ message: `[success]${email}- cart item added`,logLevel: 0});
     res.status(200).json({ message: 'Item added to cart', cartItem });
+
   } catch (err) {
+
+    logging({ message: `[error]${email}- unable to add cart item`,logLevel: 2});
     res.status(500).json({ error: 'Failed to add to cart', details: err.message });
   }
 };
@@ -28,6 +36,7 @@ exports.addToCart = async (req, res) => {
 exports.deleteFromCart = async (req, res) => {
 
   const userId = req.user.id;
+  const email = req.user.email;
 
   const {  cartElementId } = req.body;
 
@@ -35,11 +44,17 @@ exports.deleteFromCart = async (req, res) => {
     const result = await Cart.findByIdAndDelete(cartElementId);
 
     if (!result) {
+
+      logging({ message: `[404-Not found]${email}- Item not found in cart`,logLevel: 2});
       return res.status(404).json({ message: 'Item not found in cart' });
     }
 
+    logging({ message: `[success]${email}- cart item removed`,logLevel: 0});
     res.status(200).json({ message: 'Item removed from cart' });
+
   } catch (err) {
+
+    logging({ message: `[failed]${email}- failed to remove ${err.message}`,logLevel: 2});
     res.status(500).json({ error: 'Failed to remove item', details: err.message });
   }
 };
@@ -47,9 +62,12 @@ exports.deleteFromCart = async (req, res) => {
 
 exports.listCartItems = async (req, res) => {
   const userId = req.user.id;
+  const email = req.user.email;
   const token = req.cookies['token']; // get JWT from cookie
 
   if (!token) {
+
+    logging({ message: `[unauthorized]${email}`,logLevel: 2});
     return res.status(401).json({ error: 'Authentication token missing' });
   }
 
@@ -67,6 +85,7 @@ exports.listCartItems = async (req, res) => {
         });
 
         if (!response.ok) {
+          logging({ message: `[failed]${email} - failed to fetch product details from cart using fetch`,logLevel: 2});
           throw new Error(`Product service error: ${response.status}`);
         }
 
@@ -77,7 +96,8 @@ exports.listCartItems = async (req, res) => {
           product,
         };
       } catch (err) {
-        console.error(`Failed to fetch product ${item.productId}:`, err.message);
+
+        logging({ message: `[success]${email} - fetch product details `,logLevel: 0});
         return {
           ...item.toObject(),
           product: null,
@@ -87,6 +107,8 @@ exports.listCartItems = async (req, res) => {
 
     res.json(enrichedCart);
   } catch (err) {
+
+    logging({ message: `[failed]${email} - failed to fetch product details `,logLevel: 2});
     res.status(500).json({ error: 'Failed to fetch cart items', details: err.message });
   }
 };

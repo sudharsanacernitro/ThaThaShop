@@ -12,7 +12,7 @@ const logging = async (message) => {
       topic: 'Service-logging',
       messages: [
         {
-          // key: 'email',
+        //   key: 'email',
           value: JSON.stringify(message),
         },
       ],
