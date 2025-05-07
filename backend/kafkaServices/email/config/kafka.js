@@ -6,6 +6,5 @@ const kafka = new Kafka({
   
 });
 
-const consumer = kafka.consumer({ groupId: 'services' });
-
+const consumer = kafka.consumer({ groupId: 'email-service-group' });
 module.exports = { consumer };

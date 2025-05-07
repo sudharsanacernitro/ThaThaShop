@@ -5,6 +5,6 @@ const kafka = new Kafka({
   brokers: ['kafka:9092'],
 });
 
-const consumer = kafka.consumer({ groupId: 'services' });
+const consumer = kafka.consumer({ groupId: 'logging-service-group' });
 
 module.exports = { consumer };
