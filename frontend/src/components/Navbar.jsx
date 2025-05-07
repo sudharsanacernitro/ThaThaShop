@@ -42,11 +42,7 @@ const Navbar = () => {
               Cart
             </Link>
           </li>
-          <li>
-            <Link to="/contact" className="text-white font-medium cursor-pointer">
-              Contact
-            </Link>
-          </li>
+          
           <li onClick={handleLogin} className='cursor-pointer' >
             {username=="Guest"?"Login":"Logout" }
           </li>

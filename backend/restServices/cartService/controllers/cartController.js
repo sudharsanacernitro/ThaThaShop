@@ -29,10 +29,10 @@ exports.deleteFromCart = async (req, res) => {
 
   const userId = req.user.id;
 
-  const {  productId } = req.body;
+  const {  cartElementId } = req.body;
 
   try {
-    const result = await Cart.findOneAndDelete({ userId, productId });
+    const result = await Cart.findByIdAndDelete(cartElementId);
 
     if (!result) {
       return res.status(404).json({ message: 'Item not found in cart' });

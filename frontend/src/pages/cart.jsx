@@ -4,9 +4,18 @@ import { Navbar} from "../components";
 import { useEffect } from 'react';
 
 export default function CheckoutPage() {
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [checkedItems, setCheckedItems] = useState({});
+  // const [checkedItems, setCheckedItems] = useState({});
+
+  const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [town, setTown] = useState('');
+  const [district, setDistrict] = useState('');
+  const [postcode, setPostcode] = useState('');
 
   useEffect(() => {
     fetch(`http://localhost:5000/cart/list`, {
@@ -33,14 +42,23 @@ export default function CheckoutPage() {
 
   const handleBuy = (item) => {
     // Logic to buy item
+    if(email === '' || mobile === '' || firstName === '' || address === '' || town === '' || district === '' || postcode === '') {
+      alert("Please fill in all the fields");
+      return;
+    }
+    window.alert(email + " " + mobile + " " + firstName + " " + lastName + " " + address + " " + town + " " + district + " " + postcode);
     console.log("Buying", item.product.name);
     // Optionally send to server
   };
   
   const handleDelete = (itemId) => {
-    fetch(`http://localhost:5000/cart/del/${itemId}`, {
-      method: 'DELETE',
+    fetch(`http://localhost:5000/cart/del`, {
+      method: 'POST',
       credentials: 'include',
+      body: JSON.stringify({ cartElementId: itemId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(res => {
         if (res.ok) {
@@ -85,81 +103,98 @@ export default function CheckoutPage() {
           </div>
           
           {/* Contact Form */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold tracking-widest mb-4">CONTACT</h2>
-            <div className="mb-4">
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-              />
-            </div>
-            <div className="flex items-center mb-4">
+          {/* Contact Form */}
+      <div className="mb-8">
+        <h2 className="text-xl font-bold tracking-widest mb-4">CONTACT</h2>
+        <div className="mb-4">
+          <input 
+            type="email" 
+            placeholder="Your email address" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+          />
+        </div>
+        <div className="flex items-center mb-4">
+          <input 
+            type="tel" 
+            placeholder="Your mobile number"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+          />
+        </div>
+        <div className="border-b border-gray-700 mb-6"></div>
+      </div>
+
+      {/* Delivery Address Form */}
+      <div className="z-20">
+        <h2 className="text-xl font-bold tracking-widest mb-4">DELIVERY ADDRESS</h2>
+        <div className="flex flex-wrap -mx-2 mb-4">
+          <div className="w-full md:w-1/2 px-2 mb-4">
+            <label className="block mb-2">First Name</label>
             <input 
-                type="email" 
-                placeholder="Your mobile number" 
-                className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-              />
-            </div>
-            <div className="border-b border-gray-700 mb-6"></div>
+              type="text" 
+              placeholder="Your first name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+            />
           </div>
-          
-          {/* Delivery Address Form */}
-          <div className="z-20">
-            <h2 className="text-xl font-bold tracking-widest mb-4">DELIVERY ADDRESS</h2>
-            <div className="flex flex-wrap -mx-2 mb-4">
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <label className="block mb-2">First Name</label>
-                <input 
-                  type="text" 
-                  placeholder="Your first name" 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <label className="block mb-2">Last Name</label>
-                <input 
-                  type="text" 
-                  placeholder="Your last name" 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-                />
-              </div>
-            </div>
-           
-            <div className="mb-4">
-              <label className="block mb-2">Address</label>
-              <input 
-                type="text" 
-                placeholder="Your address" 
-                className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-              />
-            </div>
-            <div className="flex flex-wrap -mx-2">
-              <div className="w-full md:w-1/3 px-2 mb-4">
-                <label className="block mb-2">Town</label>
-                <input 
-                  type="text" 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-                />
-              </div>
-              <div className="w-full md:w-1/3 px-2 mb-4">
-                <label className="block mb-2">District</label>
-                <input 
-                  type="text" 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-                />
-              </div>
-              <div className="w-full md:w-1/3 px-2 mb-4">
-                <label className="block mb-2">Postcode</label>
-                <input 
-                  type="text" 
-                  className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
-                />
-              </div>
-            </div>
+          <div className="w-full md:w-1/2 px-2 mb-4">
+            <label className="block mb-2">(Optional)Last Name</label>
+            <input 
+              type="text" 
+              placeholder="Your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+            />
           </div>
         </div>
-        
+
+        <div className="mb-4">
+          <label className="block mb-2">Address</label>
+          <input 
+            type="text" 
+            placeholder="Your address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+          />
+        </div>
+
+        <div className="flex flex-wrap -mx-2">
+          <div className="w-full md:w-1/3 px-2 mb-4">
+            <label className="block mb-2">Town</label>
+            <input 
+              type="text"
+              value={town}
+              onChange={(e) => setTown(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+            />
+          </div>
+          <div className="w-full md:w-1/3 px-2 mb-4">
+            <label className="block mb-2">District</label>
+            <input 
+              type="text"
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+            />
+          </div>
+          <div className="w-full md:w-1/3 px-2 mb-4">
+            <label className="block mb-2">Postcode</label>
+            <input 
+              type="text"
+              value={postcode}
+              onChange={(e) => setPostcode(e.target.value)}
+              className="w-full bg-gray-900 border border-gray-700 rounded-full py-3 px-4"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
         {/* Right Column */}
         <div className="w-full md:w-2/4 p-4 z-20 bg-gray-800 m-3 rounded-2xl ">
           <h2 className="text-xl font-bold tracking-widest mb-6">DETAIL PRODUCT</h2>
