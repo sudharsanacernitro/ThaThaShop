@@ -1,9 +1,12 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 import { styles } from '../styles';
 
 function SubProduct() {
+
+  const navigate = useNavigate();
   const location = useLocation();
   const { category } = location.state || {};
   const [products, setProducts] = useState([]);
@@ -23,6 +26,12 @@ useEffect(() => {
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch products');
+        }
+        else if (response.status === 401) {
+          // console.error('Unauthorized');
+          // window.alert("Unauthorized");
+          navigate('/login');
+          return;
         }
         return response.json();
       })
@@ -57,6 +66,12 @@ const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch products');
+        }
+        else if (response.status === 401) {
+          // console.error('Unauthorized');
+          // window.alert("Unauthorized");
+          navigate('/login');
+          return;
         }
         
         window.alert("Added to cart");

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { ChevronDown, Search, User, X } from "lucide-react";
 import { Navbar} from "../components";
 import { useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 
 export default function CheckoutPage() {
   // const [rememberMe, setRememberMe] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   // const [checkedItems, setCheckedItems] = useState({});
+  const naviagate= useNavigate();
 
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
@@ -63,7 +65,11 @@ export default function CheckoutPage() {
       .then(res => {
         if (res.ok) {
           setCartItems(prev => prev.filter(item => item._id !== itemId));
-        } else {
+        } else if(res.status === 401) {
+          console.error('Unauthorized');
+          naviagate('/login');
+        }
+        else {
           console.error('Delete failed');
         }
       })
