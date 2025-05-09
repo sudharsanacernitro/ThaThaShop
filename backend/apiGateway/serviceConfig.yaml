@@ -77,6 +77,16 @@ routes:
         method: GET
         description: "Endpoint to list items from the cart"
 
-  
+  order:
+    port: 5004
+    IP: "orderservice"
+    subServices:
+      placeOrder:
+        route: /order/placeOrder
+        method: POST
+        description: "Endpoint to place an order"
 
-      
+      healthCheck:
+        route: /order/health
+        method: GET
+        description: "Endpoint to check the health of the order service"

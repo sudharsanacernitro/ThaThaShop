@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your app runs on (change if needed)
-EXPOSE 5002
+EXPOSE 5004
 
 # Run the app
 CMD ["sh", "-c", "sleep 60 && node service.js"]

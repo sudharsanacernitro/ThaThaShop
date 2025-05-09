@@ -18,7 +18,7 @@ app.use(cookieParser()); // 👈 Add this before your routes
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/auth', authRoutes);
-app.get('/health', (req, res) => res.send('OK'));
+app.get('/auth/health', (req, res) => res.send('OK'));
 
 
 async function init() {

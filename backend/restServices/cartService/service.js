@@ -16,7 +16,7 @@ app.use(cookieParser()); // 👈 Add this before your routes
 
 const cartRoutes = require('./routes/cartRoutes');
 app.use('/cart', cartRoutes);
-app.get('/health', (req, res) => res.send('OK'));
+app.get('/cart/health', (req, res) => res.send('OK'));
 
 
 
@@ -33,7 +33,7 @@ async function init() {
 
     // Step 3: Start your Express app
     app.listen(5003, () => {
-      console.log('🚀 Auth service running at http://localhost:5002');
+      console.log('🚀 Auth service running at http://localhost:5003');
     });
 
   } catch (err) {

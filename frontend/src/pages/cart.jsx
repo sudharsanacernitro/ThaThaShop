@@ -42,12 +42,29 @@ export default function CheckoutPage() {
   };
   
 
-  const handleBuy = (item) => {
+  const handleBuy = async(item) => {
     // Logic to buy item
     if(email === '' || mobile === '' || firstName === '' || address === '' || town === '' || district === '' || postcode === '') {
       alert("Please fill in all the fields");
       return;
     }
+
+    await fetch(`http://localhost:5000/order/placeOrder`, {
+      method: 'POST',
+      credentials: 'include',
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+                            email:email,
+                            contact:mobile,
+                            deliveryAddr:firstName+" "+address+" "+town+" "+district+" "+postcode,
+                            quantity:item.quantity,
+                            price:item.product.price,
+                            
+
+      })
+    });
     window.alert(email + " " + mobile + " " + firstName + " " + lastName + " " + address + " " + town + " " + district + " " + postcode);
     console.log("Buying", item.product.name);
     // Optionally send to server
@@ -211,7 +228,7 @@ export default function CheckoutPage() {
               <div className="flex flex-col space-y-2 mr-4">
                   <button
                     className="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-700"
-                    onClick={() => handleBuy(item._id)}
+                    onClick={() => handleBuy(item)}
                   >
                     Buy
                   </button>

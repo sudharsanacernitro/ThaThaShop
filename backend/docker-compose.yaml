@@ -126,6 +126,22 @@ services:
       - emailservice
       - productservice
 
+  orderservice:
+    build:
+      context: ./restServices/orderService
+      dockerfile: Dockerfile
+    container_name: thathashop_orderService
+    ports:
+      - "5004:5004"
+    depends_on:
+      - kafka
+      # - mongo
+      - vault
+      - loggingservice
+      - emailservice
+      - productservice
+
   
+
 
       

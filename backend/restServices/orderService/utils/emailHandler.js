@@ -31,7 +31,7 @@ const emailTemplate = ({to,itemname,quantity}) => {
     to: to,
     subject: 'Order Confirmation',
     text: `Your order ${itemname} x ${quantity} has been confirmed.`,
-    html: 'If its not you, please contact our service.',}
+    html: `Your order ${itemname} x ${quantity} has been confirmed.If its not you, please contact our service.`,}
 };
 
 module.exports = {

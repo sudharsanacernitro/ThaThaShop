@@ -1,12 +1,13 @@
 const Order = require('../models/orderModel');
 const {logging} = require('../utils/logging');
+const {sendEmailMessage,emailTemplate} = require('../utils/emailHandler');
 
+const placeOrder =  async (req, res) => {
 
-const placeOrder = async (req, res) => {
-
+    console.log("Place order called");
     const userId = req.user.id;
     const email = req.user.email;
-    const { productId, quantity , price , deliveryAddr , contact } = req.body;
+    const { productId, quantity , price , deliveryAddr , contact , productName} = req.body;
 
     const order=new Order({
         userId,
@@ -14,12 +15,21 @@ const placeOrder = async (req, res) => {
         quantity,
         price,
         deliveryAddress: deliveryAddr,
-        contact
+        contact:contact+","+email
     });
 
     try {
+
         const savedOrder = await order.save();
         logging({ message: `[success]${email}- order placed added`,logLevel: 0});
+        console.log(savedOrder);
+        const emailPayload = emailTemplate({
+            to: email,
+            itemname: productName,
+            quantity: quantity
+        });
+        await sendEmailMessage(emailPayload);
+        logging({ message: `[success]${email}- order placed email sent`,logLevel: 0});
         res.status(201).json({ message: 'Order placed successfully', order: savedOrder });
     } catch (error) {
         logging({ message: `[failed]${email}- couldn't place orders`,logLevel: 2});
