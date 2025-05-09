@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux';
 
 const Navbar = () => {
 
-  const username = useSelector((state) => state.user.userName);
+  const userRole = useSelector((state) => state.user.userRole);
   const navigate =useNavigate();
 
   function handleLogin()
   {
-    if(username==="Guest")
+    if(userRole==="Guest")
     {
       navigate('/login');
     }
@@ -32,6 +32,13 @@ const Navbar = () => {
         </div>
 
         <ul className='list-none hidden sm:flex flex-row gap-10'>
+
+        {userRole=="admin" && <li>
+            <Link to="/products" className="text-white font-medium cursor-pointer">
+              Dashboard
+            </Link>
+          </li>}
+
           <li>
             <Link to="/products" className="text-white font-medium cursor-pointer">
               Product
@@ -44,7 +51,7 @@ const Navbar = () => {
           </li>
           
           <li onClick={handleLogin} className='cursor-pointer' >
-            {username=="Guest"?"Login":"Logout" }
+            {userRole=="Guest"?"Login":"Logout" }
           </li>
         </ul>
       </div>

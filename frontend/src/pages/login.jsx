@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {Link } from 'react-router-dom';
 
 import { useDispatch } from "react-redux";
-import { setUserName,toggleLogin } from "../utils/redux/slicers/userslicer.jsx";
+import { setUserRole,toggleLogin } from "../utils/redux/slicers/userslicer.jsx";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -31,10 +31,10 @@ const LoginPage = () => {
       const data = await response.json(); // Parse response body
       const token = data.token;
   
-      console.log("Received token:", token);
+      console.log("userRole:", data.userRole);
       // sessionStorage.setItem('token', token);
   
-      dispatch(setUserName(email));
+      dispatch(setUserRole(data.userRole));
       dispatch(toggleLogin());
   
       navigate('/');

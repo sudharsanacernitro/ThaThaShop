@@ -26,7 +26,7 @@ async function login(req, res) {
 
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email , role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -39,7 +39,7 @@ async function login(req, res) {
     });
 
     logging({ message: `[Login success]${email}- ${user._id}`,logLevel: 0});
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true ,userRole:user.role});
 
   } catch (err) {
 
