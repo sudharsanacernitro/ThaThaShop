@@ -4,6 +4,7 @@ import SubProduct from './subProduct';
 import Login from './login';
 import Signup from './signup';
 import Cart from './cart';
+import AdminOrdersDashboard from './admin';
 
 export {
   Home,
@@ -11,5 +12,6 @@ export {
   SubProduct,
   Login,
   Signup,
-  Cart
+  Cart,
+  AdminOrdersDashboard
 }

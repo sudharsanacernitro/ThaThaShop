@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
-import {Product ,Home ,Login, Signup , SubProduct ,Cart} from './pages';
+import {Product ,Home ,Login, Signup , SubProduct ,Cart , AdminOrdersDashboard} from './pages';
 
 import 'swiper/css';
 
@@ -20,11 +20,12 @@ const App=()=> {
         <Route path="/login" element={<Login/>} />
         <Route path='/signup' element={<Signup/>} />
         <Route path='/cart' element={<Cart/>} />
-        
+        <Route path='/admin' element={<AdminOrdersDashboard/>} />
+
       </Routes>
      </BrowserRouter>
 
-     <div className="fixed  h-full w-[100%] right-0 sm:left-1/4  sm:bottom-2/4 z-0">
+     {/* <div className="fixed  h-full w-[100%] right-0 sm:left-1/4  sm:bottom-2/4 z-0">
           <svg
             className=""
             viewBox="0 0 500 500"
@@ -47,7 +48,7 @@ const App=()=> {
               />
             </path>
           </svg>
-    </div>
+    </div> */}
 
     </>
   )

@@ -36,8 +36,33 @@ const placeOrder =  async (req, res) => {
         res.status(500).json({ message: 'Error placing order', error });
     }
 }
-
+const getOrdersByUserId = async (req, res) => {
+    try {
+      const results = await Order.aggregate([
+        {
+          $group: {
+            _id: "$userId",
+            contact: { $first: "$contact" },
+            orderDate: { $first: "$orderDate" },
+            status: { $first: "$status" },
+            totalAmount: {
+              $sum: { $multiply: ["$price", "$quantity"] } 
+            },
+            orderCount: { $sum: 1 }
+          }
+        }
+      ]);
+  
+      console.log("Aggregation results:", results);
+      res.status(200).json(results);
+    } catch (error) {
+      console.error("Error in aggregation:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  };
+  
 
 module.exports = {
-    placeOrder
+    placeOrder,
+    getOrdersByUserId
 };
