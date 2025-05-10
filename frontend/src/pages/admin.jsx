@@ -1,22 +1,35 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Search, Filter, Download, ChevronDown, ChevronUp, MoreHorizontal, Eye, Edit, Trash2, ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function AdminOrdersDashboard() {
-  const [orders, setOrders] = useState([
-    { id: "#ORD-7352", customer: "Jane Cooper", date: "2025-05-09", status: "Completed", total: "$259.99", items: 3 },
-    { id: "#ORD-7351", customer: "Devon Lane", date: "2025-05-09", status: "Processing", total: "$124.50", items: 2 },
-    { id: "#ORD-7350", customer: "Esther Howard", date: "2025-05-08", status: "Pending", total: "$89.99", items: 1 },
-    { id: "#ORD-7349", customer: "Cameron Williamson", date: "2025-05-08", status: "Completed", total: "$399.00", items: 4 },
-    { id: "#ORD-7348", customer: "Brooklyn Simmons", date: "2025-05-07", status: "Cancelled", total: "$149.99", items: 2 },
-    { id: "#ORD-7347", customer: "Leslie Alexander", date: "2025-05-07", status: "Completed", total: "$79.95", items: 1 },
-    { id: "#ORD-7346", customer: "Jenny Wilson", date: "2025-05-06", status: "Shipped", total: "$329.75", items: 3 },
-    { id: "#ORD-7345hvkjvlj hljbovjlh lkuvpi k", customer: "Guy Hawkins", date: "2025-05-06", status: "Processing", total: "$118.50", items: 2 }
-  ]);
+  const [orders, setOrders] = useState([]);
   
-  const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'desc' });
+  const [sortConfig, setSortConfig] = useState({ key: 'orderDate', direction: 'desc' });
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/order/getOrdersByUserId', {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include"
+        });
+        const data = await response.json();
+        setOrders(data);
+        console.log("Orders data:", data);
+        // optionally set state here: setOrders(data)
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+  
+    fetchOrders();
+  }, []);
   
   // Sorting function
   const requestSort = (key) => {
@@ -161,7 +174,7 @@ export default function AdminOrdersDashboard() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <div className="flex items-center cursor-pointer" onClick={() => requestSort('id')}>
                       Order ID
-                      {sortConfig.key === 'id' ? (
+                      {sortConfig.key === '_id' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
@@ -169,7 +182,7 @@ export default function AdminOrdersDashboard() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <div className="flex items-center cursor-pointer" onClick={() => requestSort('customer')}>
                       Contact
-                      {sortConfig.key === 'customer' ? (
+                      {sortConfig.key === 'contact' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
@@ -177,7 +190,7 @@ export default function AdminOrdersDashboard() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <div className="flex items-center cursor-pointer" onClick={() => requestSort('date')}>
                       Date
-                      {sortConfig.key === 'date' ? (
+                      {sortConfig.key === 'orderDate' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
@@ -193,7 +206,7 @@ export default function AdminOrdersDashboard() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <div className="flex items-center cursor-pointer" onClick={() => requestSort('total')}>
                       Total
-                      {sortConfig.key === 'total' ? (
+                      {sortConfig.key === 'totalAmount' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
@@ -201,7 +214,7 @@ export default function AdminOrdersDashboard() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     <div className="flex items-center cursor-pointer" onClick={() => requestSort('items')}>
                       Items
-                      {sortConfig.key === 'items' ? (
+                      {sortConfig.key === 'orderCount' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
@@ -213,15 +226,15 @@ export default function AdminOrdersDashboard() {
               </thead>
               <tbody className="bg-gray-800 divide-y divide-gray-700">
                 {currentItems.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-750 transition-colors">
+                  <tr key={order._id} className="hover:bg-gray-750 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      {order.id}
+                      {order._id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.customer}
+                      {order.contact}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.date}
+                      {order.orderDate}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(order.status)}`}>
@@ -229,10 +242,10 @@ export default function AdminOrdersDashboard() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.total}
+                      {order.totalAmount}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.items}
+                      {order.orderCount}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">

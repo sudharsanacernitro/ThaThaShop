@@ -50,6 +50,17 @@ const getOrdersByUserId = async (req, res) => {
             },
             orderCount: { $sum: 1 }
           }
+        },
+        {
+            $project: {
+              _id: 0,
+              id: "$_id",
+              contact: 1,
+              orderDate: 1,
+              status: 1,
+              totalAmount: 1,
+              orderCount: 1
+            }
         }
       ]);
   
