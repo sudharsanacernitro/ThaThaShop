@@ -34,11 +34,13 @@ const Navbar = () => {
         <ul className='list-none hidden sm:flex flex-row gap-10'>
 
         {userRole=="admin" && <li>
-            <Link to="/products" className="text-white font-medium cursor-pointer">
+            <Link to="/admin" className="text-white font-medium cursor-pointer">
               Dashboard
             </Link>
           </li>}
 
+          { userRole != "admin" && 
+          <>
           <li>
             <Link to="/products" className="text-white font-medium cursor-pointer">
               Product
@@ -49,6 +51,8 @@ const Navbar = () => {
               Cart
             </Link>
           </li>
+          </>
+        }
           
           <li onClick={handleLogin} className='cursor-pointer' >
             {userRole=="Guest"?"Login":"Logout" }
