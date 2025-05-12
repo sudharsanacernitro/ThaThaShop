@@ -20,7 +20,7 @@ async function getProductsByCategory(req,res) {
 async function getProductById(req,res) {
   const itemID  = req.params.id;
 
-  console.log(req.body);
+  // console.log(req.body);
 
   try {
     const products = await Product.findById(itemID);

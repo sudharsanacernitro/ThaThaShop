@@ -1,6 +1,6 @@
 const Order = require('../models/orderModel');
 const {logging} = require('../utils/logging');
-const {sendEmailMessage,emailTemplate} = require('../utils/emailHandler');
+const {sendEmailMessage,confirmationEmailTemplate,orderUpdateEmailTemplate} = require('../utils/emailHandler');
 const { json } = require('express');
 
 const placeOrder =  async (req, res) => {
@@ -16,7 +16,8 @@ const placeOrder =  async (req, res) => {
         quantity,
         price,
         deliveryAddress: deliveryAddr,
-        contact:contact+","+email
+        userEmail:email,
+        userContact:contact,
     });
 
     try {
@@ -24,7 +25,7 @@ const placeOrder =  async (req, res) => {
         const savedOrder = await order.save();
         logging({ message: `[success]${email}- order placed added`,logLevel: 0});
         console.log(savedOrder);
-        const emailPayload = emailTemplate({
+        const emailPayload = confirmationEmailTemplate({
             to: email,
             itemname: productName,
             quantity: quantity
@@ -107,21 +108,20 @@ const displayOrder = async (req, res) => {
 
         const { data: product } = await response.json();
 
-        return json({
-          ...orderItem.toObject(),
+        console.log("Product details:", product);
+        return res.json(
           product,
-        });
+        );
 
       } catch (err) {
 
         logging({ message: `[success] - fetch product details `,logLevel: 0});
-        return json({
-          ...orderItem.toObject(),
+        console.log("Product details:", product,err);
+        return res.json({
           product: null,
-        });
+      });
       }
 
-    res.json(enrichedCart);
   } catch (err) {
 
     logging({ message: `[failed] - failed to fetch product details `,logLevel: 2});
@@ -129,9 +129,52 @@ const displayOrder = async (req, res) => {
   }
 };
 
+
+const updateOrder = async(req,res) => {
+
+  console.log("Update order called",req.body);
+  const orderId= req.body.id;
+  const status = req.body.status;
+  const deliveryDate = req.body.deliveryDate;
+  const userEmail = req.body.email;
+  const productName = req.body.name;
+  const quantity = req.body.quantity;
+
+  const emailPayload = orderUpdateEmailTemplate({
+    to: userEmail,
+    itemname: productName,
+    quantity: quantity,
+    date: deliveryDate,
+    status: status
+  });
+
+  await sendEmailMessage(emailPayload);
+  logging({ message: `[success]${userEmail}- order update email sent`,logLevel: 0});
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status: status , deliveryDate: deliveryDate},
+      { new: true }
+    );
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+
+    res.status(200).json(updatedOrder);
+  }
+  catch (error) {
+    res.status(500).json({ message: 'Error updating order', error });
+  }
+
+  res.status(200).json({ message: 'Order updated successfully' });
+}
+
+
 module.exports = {
     placeOrder,
     getOrdersByUserId,
     displayOrder,
+    updateOrder,
 
 };

@@ -11,7 +11,8 @@ const orderSchema = new mongoose.Schema({
   orderDate: { type: Date, default: Date.now },
   deliveryDate: { type: Date ,default: null},
   deliveryAddress: { type: String, required: true },
-  contact: { type: String, required: true }
+  userEmail: { type: String, required: true },
+  userContact: { type: String, required: true }
 
 }, { timestamps: true } );
 

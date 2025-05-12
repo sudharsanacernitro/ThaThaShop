@@ -96,6 +96,11 @@ routes:
         method: POST
         description: "Endpoint to get a particular order"
 
+      updateOrder:
+        route: /order/updateOrder
+        method: POST
+        description: "Endpoint to update an order"
+
       healthCheck:
         route: /order/health
         method: GET

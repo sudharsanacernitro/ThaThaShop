@@ -8,6 +8,9 @@ export default function AdminOrdersDashboard() {
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -87,27 +90,180 @@ export default function AdminOrdersDashboard() {
         return 'bg-gray-100 text-gray-800';
     }
   };
+const displayProduct = async (order) => {
+  const orderId = order._id;
+  const status = order.status;
 
-  const updateOrderStatus = async (orderId, status) => {
-    try {
-      const response = await fetch('http://localhost:5000/order/displayOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({ orderId, status })
-      });
-      const data = await response.json();
-      console.log("Order status updated:", data);
-      // Optionally refresh the orders list here
-    } catch (err) {
-      console.error("Error updating order status:", err);
+  try {
+    const response = await fetch("http://localhost:5000/order/displayOrder", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({ orderId })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error response:", errorText);
+      throw new Error(`Server error: ${response.statusText}`);
     }
+
+    const orderedProduct = await response.json(); 
+    orderedProduct.id = orderId;
+    orderedProduct.status = status;
+    orderedProduct.quantity = order.quantity;
+    orderedProduct.customerId=order.userId;
+    orderedProduct.email=order.userEmail;
+    orderedProduct.contact=order.userContact;
+    console.log("Fetched product:", orderedProduct);
+    setSelectedProduct(orderedProduct);
+    setShowPopup(true);
+  } catch (error) {
+    console.error("Error fetching product data:", error);
   }
+};
+
+const updateOrder = async()=>{
+
+    try{  
+
+      console.log("Selected product before update:", selectedProduct._id);
+
+      selectedProduct.status = shipmentStatus;
+      selectedProduct.deliveryDate = deliveryDate;
+
+      const response = await fetch("http://localhost:5000/order/updateOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(selectedProduct)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server error response:", errorText);
+        throw new Error(`Server error: ${response.statusText}`);
+      }
+
+      const updatedOrder = await response.json(); 
+      console.log("Updated order:", updatedOrder);
+      setShowPopup(false);
+    }
+    catch(err)
+    {
+      console.error("Error updating order:", err);
+    }
+}
+
+
+const [shipmentStatus, setShipmentStatus] = useState('pending');
+const [deliveryDate, setDeliveryDate] = useState('');
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 ">
+
+{showPopup && selectedProduct && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="bg-gray-700 rounded-lg shadow-xl p-6 max-w-sm w-full text-white border border-gray-600">
+      <div className="flex justify-between items-start mb-4">
+        <h2 className="text-xl font-bold text-gray-100">{selectedProduct.name}</h2>
+        <button
+          onClick={() => setShowPopup(false)}
+          className="text-gray-400 hover:text-gray-200 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div className="flex flex-col items-center mb-4">
+        <img
+          src={selectedProduct.image}
+          alt={selectedProduct.name}
+          className="w-36 h-36 object-cover rounded-md border border-gray-500 mb-4"
+        />
+      </div>
+
+      <p>{selectedProduct.customerId}</p>
+      
+      <div className="space-y-2 text-gray-300">
+        <p className="flex justify-between">
+          <span className="font-medium">Price:</span>
+          <span className="text-green-400 font-semibold">${selectedProduct.price} X {selectedProduct.quantity}</span>
+        </p>
+        <p className="flex justify-between">
+          <span className="font-medium">Category:</span>
+          <span>{selectedProduct.category}</span>
+        </p>
+        <p className="flex justify-between">
+          <span className="font-medium">Available:</span>
+          <span className={selectedProduct.available ? "text-green-400" : "text-red-400"}>
+            {selectedProduct.available ? "Yes" : "No"}
+          </span>
+        </p>
+      </div>
+
+      <div className="mt-6 border-t border-gray-600 pt-4">
+        <h3 className="text-lg font-medium text-gray-200 mb-3">Order Information</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="shipmentStatus" className="block text-sm font-medium text-gray-300 mb-1">
+              Shipment Status
+            </label>
+          <select 
+              id="shipmentStatus" 
+              className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={shipmentStatus}
+              onChange={(e) => setShipmentStatus(e.target.value)}
+                >
+              <option value="pending">Pending</option>
+              <option value="processed">Processed</option>
+              <option value="delivered">Delivered</option>
+            </select>
+
+          </div>
+          
+          <div>
+            <label htmlFor="deliveryDate" className="block text-sm font-medium text-gray-300 mb-1">
+              Delivery Date
+            </label>
+            <input 
+                type="date" 
+                id="deliveryDate" 
+                className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={deliveryDate}
+                onChange={(e) => setDeliveryDate(e.target.value)}
+              />
+
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex justify-between">
+        <button
+          onClick={() => setShowPopup(false)}
+          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-gray-700"
+        >
+          Cancel
+        </button>
+        
+       <button
+  onClick={() => updateOrder()}
+  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-700"
+>
+  Save Changes
+</button>
+
+      </div>
+    </div>
+  </div>
+)}
       {/* Header */}
       <header className="bg-gray-800 px-6 py-4 shadow">
         <div className="flex items-center justify-between">
@@ -249,7 +405,7 @@ export default function AdminOrdersDashboard() {
                       {order._id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.contact}
+                      {order.userEmail+" "+order.userContact}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {order.orderDate.split('T')[0]} {order.orderDate.split('T')[1].split('.')[0]}
@@ -268,7 +424,7 @@ export default function AdminOrdersDashboard() {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
                         
-                        <button className="p-1 rounded-md hover:bg-gray-700 transition-colors" onClick={() => updateOrderStatus(order._id, order.status)}>
+                        <button className="p-1 rounded-md hover:bg-gray-700 transition-colors" onClick={() => displayProduct(order)}>
                           <Edit className="h-4 w-4" />
                         </button>
                         <button className="p-1 rounded-md hover:bg-gray-700 transition-colors">

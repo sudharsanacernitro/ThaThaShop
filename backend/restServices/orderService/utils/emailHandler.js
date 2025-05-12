@@ -25,7 +25,7 @@ const sendEmailMessage = async (message) => {
 };
 
 
-const emailTemplate = ({to,itemname,quantity}) => {
+const confirmationEmailTemplate = ({to,itemname,quantity}) => {
  
   return{
     to: to,
@@ -34,7 +34,20 @@ const emailTemplate = ({to,itemname,quantity}) => {
     html: `Your order ${itemname} x ${quantity} has been confirmed.If its not you, please contact our service.`,}
 };
 
+
+
+const orderUpdateEmailTemplate = ({to,itemname,quantity,date,status}) => {
+ 
+  return{
+    to: to,
+    subject: 'Order Update',
+    text: `Your order ${itemname} x ${quantity} has an update.`,
+    html: `Your order ${itemname} x ${quantity} is ${status} and about to deliver on ${date}.`,}
+};
+
+
 module.exports = {
   sendEmailMessage,
-  emailTemplate
+  confirmationEmailTemplate,
+  orderUpdateEmailTemplate
 };
