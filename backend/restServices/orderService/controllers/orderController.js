@@ -1,6 +1,7 @@
 const Order = require('../models/orderModel');
 const {logging} = require('../utils/logging');
 const {sendEmailMessage,emailTemplate} = require('../utils/emailHandler');
+const { json } = require('express');
 
 const placeOrder =  async (req, res) => {
 
@@ -38,31 +39,7 @@ const placeOrder =  async (req, res) => {
 }
 const getOrdersByUserId = async (req, res) => {
     try {
-      const results = await Order.aggregate([
-        {
-          $group: {
-            _id: "$userId",
-            contact: { $first: "$contact" },
-            orderDate: { $first: "$orderDate" },
-            status: { $first: "$status" },
-            totalAmount: {
-              $sum: { $multiply: ["$price", "$quantity"] } 
-            },
-            orderCount: { $sum: 1 }
-          }
-        },
-        {
-            $project: {
-              _id: 0,
-              id: "$_id",
-              contact: 1,
-              orderDate: 1,
-              status: 1,
-              totalAmount: 1,
-              orderCount: 1
-            }
-        }
-      ]);
+      const results = await Order.find();
   
       console.log("Aggregation results:", results);
       res.status(200).json(results);
@@ -71,9 +48,90 @@ const getOrdersByUserId = async (req, res) => {
       res.status(500).json({ error: "Server error" });
     }
   };
+
+
+// const getByUserId = async (req, res) => {
+//     const {userId} = req.body;
+//     try {
+//         const order = await Order.find({userId:userId});
+//         if (!order) {
+//             return res.status(404).json({ message: 'Order not found' });
+//         }
+//         res.status(200).json(order);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Error fetching order', error });
+//     }
+// };
+
+
+// const updateOrderStatus = async (req, res) => {
+//     const { orderId, status } = req.body;
+//     try {
+//         const updatedOrder = await Order.findandUpdate(
+//             { _id: orderId },
+//             { status: status },
+//             { new: true }
+//         );
   
+const displayOrder = async (req, res) => {
+
+  const orderId = req.body.orderId;
+  const token = req.cookies['token']; // get JWT from cookie
+
+  if (!token) {
+
+    logging({ message: `[unauthorized]`,logLevel: 2});
+    return res.status(401).json({ error: 'Authentication token missing' });
+  }
+
+  try {
+    const orderItem = await Order.findById(orderId);
+    if (!orderItem) {
+      logging({ message: `[404-Not found]- Item not found in cart`,logLevel: 2});
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
+
+      try {
+        const response = await fetch(`http://productservice:5002/product/id/${orderItem.productId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie': `token=${token}` // forward JWT cookie
+          }
+        });
+
+        if (!response.ok) {
+          logging({ message: `[failed] - failed to fetch product details from cart using fetch`,logLevel: 2});
+          throw new Error(`Product service error: ${response.status}`);
+        }
+
+        const { data: product } = await response.json();
+
+        return json({
+          ...orderItem.toObject(),
+          product,
+        });
+
+      } catch (err) {
+
+        logging({ message: `[success] - fetch product details `,logLevel: 0});
+        return json({
+          ...orderItem.toObject(),
+          product: null,
+        });
+      }
+
+    res.json(enrichedCart);
+  } catch (err) {
+
+    logging({ message: `[failed] - failed to fetch product details `,logLevel: 2});
+    res.status(500).json({ error: 'Failed to fetch cart items', details: err.message });
+  }
+};
 
 module.exports = {
     placeOrder,
-    getOrdersByUserId
+    getOrdersByUserId,
+    displayOrder,
+
 };

@@ -88,6 +88,24 @@ export default function AdminOrdersDashboard() {
     }
   };
 
+  const updateOrderStatus = async (orderId, status) => {
+    try {
+      const response = await fetch('http://localhost:5000/order/displayOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ orderId, status })
+      });
+      const data = await response.json();
+      console.log("Order status updated:", data);
+      // Optionally refresh the orders list here
+    } catch (err) {
+      console.error("Error updating order status:", err);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 ">
       {/* Header */}
@@ -125,7 +143,7 @@ export default function AdminOrdersDashboard() {
                 All
               </button>
               <button 
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${selectedFilter === 'Pending' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${selectedFilter === 'pending' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
                 onClick={() => setSelectedFilter('Pending')}
               >
                 Pending
@@ -234,7 +252,7 @@ export default function AdminOrdersDashboard() {
                       {order.contact}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.orderDate}
+                      {order.orderDate.split('T')[0]} {order.orderDate.split('T')[1].split('.')[0]}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(order.status)}`}>
@@ -242,17 +260,15 @@ export default function AdminOrdersDashboard() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.totalAmount}
+                      {(order.price*order.quantity).toFixed(2)} $
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {order.orderCount}
+                      {order.quantity}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
-                        <button className="p-1 rounded-md hover:bg-gray-700 transition-colors">
-                          <Eye className="h-4 w-4" />
-                        </button>
-                        <button className="p-1 rounded-md hover:bg-gray-700 transition-colors">
+                        
+                        <button className="p-1 rounded-md hover:bg-gray-700 transition-colors" onClick={() => updateOrderStatus(order._id, order.status)}>
                           <Edit className="h-4 w-4" />
                         </button>
                         <button className="p-1 rounded-md hover:bg-gray-700 transition-colors">

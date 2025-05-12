@@ -56,11 +56,13 @@ export default function CheckoutPage() {
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
+                            productId:item.product._id,
                             email:email,
                             contact:mobile,
                             deliveryAddr:firstName+" "+address+" "+town+" "+district+" "+postcode,
                             quantity:item.quantity,
                             price:item.product.price,
+                            productName:item.product.name,
                             
 
       })

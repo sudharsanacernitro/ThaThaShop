@@ -91,6 +91,10 @@ routes:
         method: GET
         description: "Endpoint to get orders by user ID"
 
+      getOrderByUserId:
+        route: /order/displayOrder
+        method: POST
+        description: "Endpoint to get a particular order"
 
       healthCheck:
         route: /order/health

@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const orderSchema = new mongoose.Schema({
 
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
-  productId: { type: Schema.Types.ObjectId, ref: 'products' },
+  productId: { type: Schema.Types.ObjectId, ref: 'Product' },
   quantity: { type: Number, required: true },
   price: { type: Number, required: true },
   status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
