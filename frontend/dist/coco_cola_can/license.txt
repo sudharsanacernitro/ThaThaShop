@@ -1,0 +1,11 @@
+Model Information:
+* title:	Coco Cola can
+* source:	https://sketchfab.com/3d-models/coco-cola-can-3593d1f7e87b4fd98f25acbd99e5c39f
+* author:	aakashkumar3369 (https://sketchfab.com/aakashkumar3369)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Coco Cola can" (https://sketchfab.com/3d-models/coco-cola-can-3593d1f7e87b4fd98f25acbd99e5c39f) by aakashkumar3369 (https://sketchfab.com/aakashkumar3369) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -164,10 +164,10 @@ const [shipmentStatus, setShipmentStatus] = useState('pending');
 const [deliveryDate, setDeliveryDate] = useState('');
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 ">
+    <div className="min-h-screen bg-gray-900 text-gray-200 relative">
 
 {showPopup && selectedProduct && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
     <div className="bg-gray-700 rounded-lg shadow-xl p-6 max-w-sm w-full text-white border border-gray-600">
       <div className="flex justify-between items-start mb-4">
         <h2 className="text-xl font-bold text-gray-100">{selectedProduct.name}</h2>
@@ -265,9 +265,9 @@ const [deliveryDate, setDeliveryDate] = useState('');
   </div>
 )}
       {/* Header */}
-      <header className="bg-gray-800 px-6 py-4 shadow">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Orders Dashboard</h1>
+      <header className="bg-gray-800 px-6 py-4 shadow z-20">
+        <div className="flex items-center justify-between z-20">
+          <h1 className="text-2xl font-bold z-20">Orders Dashboard</h1>
           <div className="flex space-x-4">
             <button className="p-2 rounded-md hover:bg-gray-700 transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -287,13 +287,13 @@ const [deliveryDate, setDeliveryDate] = useState('');
       </header>
 
       {/* Main Content */}
-      <main className="p-6 ">
-        <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden ">
+      <main className="p-6 z-30">
+        <div className="bg-gray-800 rounded-lg shadow-md overflow-hidden z-20">
           {/* Filters and Search */}
-          <div className="p-4 border-b border-gray-700 flex justify-between items-center flex-wrap gap-4">
-            <div className="flex space-x-2">
+          <div className="p-4 border-b border-gray-700 flex justify-between items-center flex-wrap gap-4 z-20">
+            <div className="flex space-x-2 z-20">
               <button 
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${selectedFilter === 'All' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors z-20${selectedFilter === 'All' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}
                 onClick={() => setSelectedFilter('All')}
               >
                 All
@@ -318,8 +318,8 @@ const [deliveryDate, setDeliveryDate] = useState('');
               </button>
             </div>
             
-            <div className="flex space-x-3">
-              <div className="relative">
+            <div className="flex space-x-3 z-20">
+              <div className="relative z-20">
                 <input 
                   type="text" 
                   placeholder="Search orders..." 
@@ -328,12 +328,12 @@ const [deliveryDate, setDeliveryDate] = useState('');
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
               </div>
               
-              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm">
+              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm z-20">
                 <Filter className="h-4 w-4 mr-2" />
                 Filter
               </button>
               
-              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm">
+              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm z-20">
                 <Download className="h-4 w-4 mr-2" />
                 Export
               </button>
@@ -341,20 +341,20 @@ const [deliveryDate, setDeliveryDate] = useState('');
           </div>
           
           {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto relative z-20">
             <table className="min-w-full divide-y divide-gray-700">
-              <thead className="bg-gray-750 ">
+              <thead className="bg-gray-750 z-20">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    <div className="flex items-center cursor-pointer" onClick={() => requestSort('id')}>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider relative z-20">
+                    <div className="flex items-center cursor-pointer relative z-20" onClick={() => requestSort('id')}>
                       Order ID
                       {sortConfig.key === '_id' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
                       ) : null}
                     </div>
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    <div className="flex items-center cursor-pointer" onClick={() => requestSort('customer')}>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider z-20">
+                    <div className="flex items-center cursor-pointer " onClick={() => requestSort('customer')}>
                       Contact
                       {sortConfig.key === 'contact' ? (
                         sortConfig.direction === 'asc' ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />
@@ -398,20 +398,20 @@ const [deliveryDate, setDeliveryDate] = useState('');
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-800 divide-y divide-gray-700">
+              <tbody className="bg-gray-800 divide-y divide-gray-700 z-20">
                 {currentItems.map((order) => (
                   <tr key={order._id} className="hover:bg-gray-750 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       {order._id}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm z-20">
                       {order.userEmail+" "+order.userContact}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {order.orderDate.split('T')[0]} {order.orderDate.split('T')[1].split('.')[0]}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(order.status)}`}>
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(order.status)} z-20`}>
                         {order.status}
                       </span>
                     </td>
