@@ -318,26 +318,7 @@ const [deliveryDate, setDeliveryDate] = useState('');
               </button>
             </div>
             
-            <div className="flex space-x-3 z-20">
-              <div className="relative z-20">
-                <input 
-                  type="text" 
-                  placeholder="Search orders..." 
-                  className="pl-9 pr-4 py-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-              </div>
-              
-              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm z-20">
-                <Filter className="h-4 w-4 mr-2" />
-                Filter
-              </button>
-              
-              <button className="flex items-center px-3 py-2 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors text-sm z-20">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </button>
-            </div>
+           
           </div>
           
           {/* Table */}
