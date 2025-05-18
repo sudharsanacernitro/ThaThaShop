@@ -25,7 +25,7 @@ const Navbar = () => {
         <div className='flex flex-row'>
           <p className={`${styles.navbarTitle} text-[18px] font-bold cursor-pointer flex`}>
           <Link to="/" >
-          ThaTha shop
+          MahaLakshmi shop
             </Link>
             
           </p>

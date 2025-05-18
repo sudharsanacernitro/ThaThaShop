@@ -103,7 +103,7 @@ const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10)
                   <div className='w-[10px] h-[10px] rounded-2xl bg-green-600 animate-blink'></div>
                 </div>
                 <p className='font-[500] text-[25px] text-amber-400'>
-                  $ {product.price}
+                  ₹ {product.price}
                 </p>
               </div>
             </div>
@@ -136,7 +136,7 @@ const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10)
      
            <div className='mt-10 flex justify-start items-center flex-col w-full'>
              <h2 className='text-7xl font-bold mb-2 uppercase'>{selectedProduct.name}</h2>
-             <p className='text-xl text-white mb-2'>Price: ${selectedProduct.price}</p>
+             <p className='text-xl text-white mb-2'>Price: ₹{selectedProduct.price}</p>
              <p className='text-md text-gray-600'>Description goes here...</p>
      
              {/* Quantity Selector */}

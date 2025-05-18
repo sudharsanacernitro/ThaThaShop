@@ -167,7 +167,7 @@ const [deliveryDate, setDeliveryDate] = useState('');
     <div className="min-h-screen bg-gray-900 text-gray-200 relative">
 
 {showPopup && selectedProduct && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
     <div className="bg-gray-700 rounded-lg shadow-xl p-6 max-w-sm w-full text-white border border-gray-600">
       <div className="flex justify-between items-start mb-4">
         <h2 className="text-xl font-bold text-gray-100">{selectedProduct.name}</h2>
