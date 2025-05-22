@@ -25,21 +25,288 @@ Project Overview
 This project implements a microservice architecture for an e-commerce-like application. It separates core functionalities such as authentication, cart management, product handling, and order processing into independent services. Communication between these services is handled through a combination of RESTful APIs and Kafka message queues, ensuring a loosely coupled and highly scalable system.
 Folder Structure
 
-The project's backend is organized into distinct logical units:
+The project's backend is organized into distinc
 
 ├── backend
-│   ├── apiGateway           # Entry point for all client requests
-│   ├── docker-compose.yaml  # Defines multi-container Docker application
-│   ├── Dockerfile           # Base Dockerfile for the backend (if any shared build steps)
-│   ├── kafkaServices        # Services communicating via Kafka
-│   │   ├── email            # Email notification service
-│   │   └── logging          # Centralized logging consumer
-│   ├── logs                 # Consolidated logs from various services
-│   └── restServices         # RESTful API services
-│       ├── authService      # Handles user authentication and authorization
-│       ├── cartService      # Manages user shopping carts
-│       ├── orderService     # Processes and manages orders
-│       └── productService   # Manages product information
+
+│   ├── apiGateway
+
+│   │   ├── Dockerfile
+
+│   │   ├── logging.js
+
+│   │   ├── logs
+
+│   │   │   ├── combined.log
+
+│   │   │   └── error.log
+
+│   │   ├── package.json
+
+│   │   ├── package-lock.json
+
+│   │   ├── public
+
+│   │   │   ├── juice1.webp
+
+│   │   │   └── juice2.webp
+
+│   │   ├── server.js
+
+│   │   ├── serviceConfig.yaml
+
+│   │   ├── testing.js
+
+│   │   └── utils
+
+│   │       └── secretsLoader.js
+
+│   ├── docker-compose.yaml
+
+│   ├── Dockerfile
+
+│   ├── kafkaServices
+
+│   │   ├── email
+
+│   │   │   ├── config
+
+│   │   │   │   ├── kafka.js
+
+│   │   │   │   └── mailer.js
+
+│   │   │   ├── Dockerfile
+
+│   │   │   ├── driver.js
+
+│   │   │   ├── package.json
+
+│   │   │   ├── package-lock.json
+
+│   │   │   ├── testing
+
+│   │   │   │   └── run.js
+
+│   │   │   └── utils
+
+│   │   │       ├── Mailsender.js
+
+│   │   │       └── pipelineMsgHandler.js
+
+│   │   └── logging
+
+│   │       ├── config
+
+│   │       │   ├── kafka.js
+
+│   │       │   └── winstonLogger.js
+
+│   │       ├── Dockerfile
+
+│   │       ├── driver.js
+
+│   │       ├── logs
+
+│   │       │   └── authService
+
+│   │       │       ├── error.log
+
+│   │       │       ├── info.log
+
+│   │       │       └── warn.log
+
+│   │       ├── package.json
+
+│   │       ├── package-lock.json
+
+│   │       ├── testing
+
+│   │       │   └── run.js
+
+│   │       └── utils
+
+│   │           └── pipelineMsgHandler.js
+
+│   ├── logs
+
+│   │   ├── authService
+
+│   │   │   ├── error.log
+
+│   │   │   ├── info.log
+
+│   │   │   └── warn.log
+
+│   │   └── cartService
+
+│   │       ├── error.log
+
+│   │       ├── info.log
+
+│   │       └── warn.log
+
+│   └── restServices
+
+│       ├── authService
+
+│       │   ├── config
+
+│       │   │   ├── db.js
+
+│       │   │   └── kafka.js
+
+│       │   ├── controllers
+
+│       │   │   └── authController.js
+
+│       │   ├── Dockerfile
+
+│       │   ├── models
+
+│       │   │   └── userModel.js
+
+│       │   ├── package.json
+
+│       │   ├── package-lock.json
+
+│       │   ├── routes
+
+│       │   │   └── authRoutes.js
+
+│       │   ├── service.js
+
+│       │   └── utils
+
+│       │       ├── emailHandler.js
+
+│       │       ├── logging.js
+
+│       │       └── vaultClient.js
+
+│       ├── cartService
+
+│       │   ├── config
+
+│       │   │   ├── db.js
+
+│       │   │   └── kafka.js
+
+│       │   ├── controllers
+
+│       │   │   └── cartController.js
+
+│       │   ├── Dockerfile
+
+│       │   ├── middleware
+
+│       │   │   └── auth.js
+
+│       │   ├── models
+
+│       │   │   └── cartModel.js
+
+│       │   ├── package.json
+
+│       │   ├── package-lock.json
+
+│       │   ├── routes
+
+│       │   │   └── cartRoutes.js
+
+│       │   ├── service.js
+
+│       │   └── utils
+
+│       │       ├── logging.js
+
+│       │       └── vaultClient.js
+
+│       ├── orderService
+
+│       │   ├── config
+
+│       │   │   ├── db.js
+
+│       │   │   └── kafka.js
+
+│       │   ├── controllers
+
+│       │   │   └── orderController.js
+
+│       │   ├── Dockerfile
+
+│       │   ├── middleware
+
+│       │   │   ├── adminAuth.js
+
+│       │   │   └── userAuth.js
+
+│       │   ├── models
+
+│       │   │   ├── orderModel.js
+
+│       │   │   └── user.js
+
+│       │   ├── package.json
+
+│       │   ├── package-lock.json
+
+│       │   ├── routes
+
+│       │   │   └── orderRoutes.js
+
+│       │   ├── service.js
+
+│       │   └── utils
+
+│       │       ├── emailHandler.js
+
+│       │       ├── logging.js
+
+│       │       └── vaultClient.js
+
+│       └── productService
+
+│           ├── config
+
+│           │   ├── db.js
+
+│           │   └── kafka.js
+
+│           ├── controllers
+
+│           │   └── prodcutController.js
+
+│           ├── Dockerfile
+
+│           ├── middleware
+
+│           │   └── auth.js
+
+│           ├── models
+
+│           │   ├── productModel.js
+
+│           │   └── user.js
+
+│           ├── package.json
+
+│           ├── package-lock.json
+
+│           ├── routes
+
+│           │   └── prodcutRoutes.js
+
+│           ├── service.js
+
+│           └── utils
+
+│               ├── logging.js
+
+│               ├── pipelineMsgHandler.js
+
+│               └── vaultClient.js 
+
 
 Each microservice typically follows a similar internal structure, including:
 
