@@ -6,7 +6,7 @@ const { loadSecrets } = require('./utils/vaultClient');
 const connectDB = require('./config/db');
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000', // Replace with your frontend URL
   credentials: true,
 }));
 app.use(express.json());

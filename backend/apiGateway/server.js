@@ -9,7 +9,7 @@ const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
 const logger = require('./logging'); // Your custom logger
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3000', // Replace with your frontend URL
   credentials: true,
 }));
 
