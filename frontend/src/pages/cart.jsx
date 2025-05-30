@@ -9,7 +9,7 @@ export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
   // const [checkedItems, setCheckedItems] = useState({});
   const naviagate= useNavigate();
-
+    const ip=import.meta.env.VITE_API_URL;
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -20,7 +20,7 @@ export default function CheckoutPage() {
   const [postcode, setPostcode] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:5000/cart/list`, {
+    fetch(`${ip}/cart/list`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    await fetch(`http://localhost:5000/order/placeOrder`, {
+    await fetch(`${ip}/order/placeOrder`, {
       method: 'POST',
       credentials: 'include',
       headers:{
@@ -73,7 +73,7 @@ export default function CheckoutPage() {
   };
   
   const handleDelete = (itemId) => {
-    fetch(`http://localhost:5000/cart/del`, {
+    fetch(`${ip}/cart/del`, {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify({ cartElementId: itemId }),

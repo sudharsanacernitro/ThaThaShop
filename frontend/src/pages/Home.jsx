@@ -52,7 +52,8 @@ const Home=()=>{
 
   return(
     <div className="relative  bg-gray-900 w-full h-screen text-white">
-    <Navbar/>
+    <Navbar/>  const ip=process.env.REACT_APP_API;
+
  
    <Hero/>
  

@@ -11,11 +11,12 @@ function SubProduct() {
   const { category } = location.state || {};
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+    const ip=import.meta.env.VITE_API_URL;
 useEffect(() => {
   if (category) {
     const token = localStorage.getItem('jwtToken'); // assuming the JWT is stored in localStorage
 
-    fetch('http://localhost:5000/product/list', {
+    fetch(`${ip}/product/list`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ const decrementCount = () => setItemCount((prev) => (prev > 10 ? prev - 10 : 10)
 
  async function addToCart(productId,price)
   {
-    fetch('http://localhost:5000/cart/add', {
+    fetch(`${ip}/cart/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -6,12 +6,12 @@ const { loadSecrets } = require('./utils/vaultClient');
 const connectDB = require('./config/db');
 
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: ['http://localhost:3000','https://frontend.localhost'], // Replace with your frontend URL
   credentials: true,
 }));
 
 app.use(express.json());
-
+app.set('trust proxy', 1); // Or 'loopback', or true
 const cookieParser = require('cookie-parser');
 app.use(cookieParser()); // 👈 Add this before your routes
 

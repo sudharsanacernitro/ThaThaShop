@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import {Link } from 'react-router-dom';
 
 const SignupPage = () => {
+
+    const ip=import.meta.env.VITE_API_URL;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,7 +17,7 @@ const SignupPage = () => {
     e.preventDefault();
     console.log("Login clicked:", { email, password });
 
-    const response = await fetch('http://localhost:5000/auth/register', {
+    const response = await fetch(`${ip}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

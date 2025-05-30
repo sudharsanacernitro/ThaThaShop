@@ -3,7 +3,7 @@ import { Search, Filter, Download, ChevronDown, ChevronUp, MoreHorizontal, Eye, 
 
 export default function AdminOrdersDashboard() {
   const [orders, setOrders] = useState([]);
-  
+    const ip=import.meta.env.VITE_API_URL;
   const [sortConfig, setSortConfig] = useState({ key: 'orderDate', direction: 'desc' });
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +15,7 @@ export default function AdminOrdersDashboard() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5000/order/getOrdersByUserId', {
+        const response = await fetch(`${ip}/order/getOrdersByUserId`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
@@ -95,7 +95,7 @@ const displayProduct = async (order) => {
   const status = order.status;
 
   try {
-    const response = await fetch("http://localhost:5000/order/displayOrder", {
+    const response = await fetch(`${ip}/order/displayOrder`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -134,7 +134,7 @@ const updateOrder = async()=>{
       selectedProduct.status = shipmentStatus;
       selectedProduct.deliveryDate = deliveryDate;
 
-      const response = await fetch("http://localhost:5000/order/updateOrder", {
+      const response = await fetch(`${ip}/order/updateOrder`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

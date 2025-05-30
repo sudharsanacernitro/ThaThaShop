@@ -7,6 +7,11 @@ import { useDispatch } from "react-redux";
 import { setUserRole,toggleLogin } from "../utils/redux/slicers/userslicer.jsx";
 
 const LoginPage = () => {
+
+  const ip=import.meta.env.VITE_API_URL;
+  console.log("ip:",ip);
+
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,7 +25,7 @@ const LoginPage = () => {
     e.preventDefault();
     console.log("Login clicked:", { email, password });
 
-    const response = await fetch('http://localhost:5000/auth/login', {
+    const response = await fetch(`${ip}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', //  session cookies
@@ -40,7 +45,7 @@ const LoginPage = () => {
       navigate('/');
 
     } else {
-      window.alert("Invalid credentials");
+      window.alert("Invalid credentials"+response.status);
     }
 
   };
