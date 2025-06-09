@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: loggingservice-svc  # Prefer lowercase and consistent naming
+  name: loggingservice  # Prefer lowercase and consistent naming
 spec:
   selector:
     app: loggingservice
   ports:
     - protocol: TCP
-      port: 8200
-      targetPort: 8200
+      port: 3502
+      targetPort: 3502
 
 ---
 
@@ -30,5 +30,5 @@ spec:
     spec:
       containers:
         - name: loggingservice-container
-          image: backend-loggingservice:latest
+          image: sudharsan0007/thathashop-loggingservice:latest
           

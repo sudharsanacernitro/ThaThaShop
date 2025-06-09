@@ -5,7 +5,10 @@ metadata:
 spec:
   selector:
     app: emailservice
-  
+  ports:
+    - protocol: TCP
+      port: 3501
+      targetPort: 3501
 
 ---
 
