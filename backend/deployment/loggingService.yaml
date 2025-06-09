@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: loggingservice-svc  # Prefer lowercase and consistent naming
+spec:
+  selector:
+    app: loggingservice
+  ports:
+    - protocol: TCP
+      port: 8200
+      targetPort: 8200
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loggingservice-deployment
+  labels:
+    app: loggingservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loggingservice
+  template:
+    metadata:
+      labels:
+        app: loggingservice
+    spec:
+      containers:
+        - name: loggingservice-container
+          image: backend-loggingservice:latest
+          
