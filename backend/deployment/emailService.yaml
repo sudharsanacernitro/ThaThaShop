@@ -1,14 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: emailservice-svc  # Prefer lowercase and consistent naming
+  name: emailservice  # Prefer lowercase and consistent naming
 spec:
   selector:
     app: emailservice
-  ports:
-    - protocol: TCP
-      port: 8200
-      targetPort: 8200
+  
 
 ---
 
