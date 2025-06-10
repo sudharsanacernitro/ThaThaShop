@@ -45,6 +45,15 @@ services:
       - IPC_LOCK
     command: vault server -dev
 
+  #redis setup
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
 
 # Micro-services 
 
