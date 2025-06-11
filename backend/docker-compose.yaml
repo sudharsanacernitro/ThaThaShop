@@ -47,13 +47,14 @@ services:
 
   #redis setup
   redis:
-    image: redis:7-alpine
+    image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
     container_name: redis
+    ulimits:
+      memlock: -1
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    restart: unless-stopped
 
 # Micro-services 
 
