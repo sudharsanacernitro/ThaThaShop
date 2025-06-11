@@ -2,13 +2,13 @@ version: '3'
 
 services:
   # MongoDB setup
-  # mongo:
-  #   image: mongo
-  #   container_name: my-mongo
-  #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - mongodata:/data/db
+  mongodb:
+    image: mongo
+    container_name: my-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
 
   # Zookeeper setup
   zookeeper:
@@ -85,7 +85,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      # - mongo
+      - mongodb
       - vault
       - authservice
       - productservice
@@ -99,7 +99,7 @@ services:
       - "5001:5001"
     depends_on:
       - kafka
-      # - mongo
+      - mongodb
       - vault
       - loggingservice
       - emailservice
@@ -114,7 +114,7 @@ services:
       - "5002:5002"
     depends_on:
       - kafka
-      # - mongo
+      - mongodb
       - vault
       - loggingservice
       - emailservice
@@ -129,7 +129,7 @@ services:
       - "5003:5003"
     depends_on:
       - kafka
-      # - mongo
+      - mongodb
       - vault
       - loggingservice
       - emailservice
@@ -144,7 +144,7 @@ services:
       - "5004:5004"
     depends_on:
       - kafka
-      # - mongo
+      - mongodb
       - vault
       - loggingservice
       - emailservice
@@ -154,3 +154,8 @@ services:
 
 
       
+#redis volume 
+
+volumes:
+  redis_data:
+  mongodata:

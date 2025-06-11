@@ -8,6 +8,9 @@ const path=require('path');
 const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
 const logger = require('./logging'); // Your custom logger
 
+const rateLimiter=require("./middlewares/ratelimiter");
+
+
 app.use(cors({
   origin: ['http://localhost:3000','https://frontend.localhost'], // Replace with your frontend URL
   credentials: true,
@@ -20,6 +23,8 @@ app.use(cookieParser());
 require('./utils/secretsLoader');
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(rateLimiter); //ratelimiting using redis
 
 // Setup proxy with error logging
 for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
