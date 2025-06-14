@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
+import {StreamUpdates} from './client';
+
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<DeliveryMan />} />
-      <Route path="/other" element={<DeliveryMan />} />
+      <Route path="/client" element={<StreamUpdates />} />
     </Routes>
   );
 }
