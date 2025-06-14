@@ -1,15 +1,25 @@
 import { useEffect } from 'react';
 
+import { Routes, Route } from 'react-router-dom';
+
 export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<DeliveryMan />} />
+      <Route path="/other" element={<DeliveryMan />} />
+    </Routes>
+  );
+}
+
+function DeliveryMan() {
   useEffect(() => {
-    // Connect to WebSocket backend
-    const socket = new WebSocket('ws://192.168.1.37:4000'); // replace with your server URL
+    const socket = new WebSocket('ws://192.168.1.37:4000');
+    let watchId;
 
     socket.onopen = () => {
       console.log('✅ WebSocket connected');
 
-      // Start watching location
-      const watchId = navigator.geolocation.watchPosition(
+      watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
 
@@ -19,7 +29,6 @@ export default function App() {
             timestamp: Date.now(),
           };
 
-          // Send to server
           socket.send(JSON.stringify(gpsData));
           console.log('📤 Sent:', gpsData);
         },
@@ -27,20 +36,22 @@ export default function App() {
           console.error('❌ GPS Error:', error);
         },
         {
-          enableHighAccuracy: true,     // for GPS-level precision
+          enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0,
         }
       );
+    };
 
-      // Cleanup
-      return () => {
+    // ✅ Proper cleanup
+    return () => {
+      if (watchId !== undefined) {
         navigator.geolocation.clearWatch(watchId);
-        socket.close();
-      };
+      }
+      socket.close();
+      console.log('🧹 Cleaned up WebSocket and GPS watch');
     };
   }, []);
 
-  return (<h1>Location Tracking</h1>) // no UI needed
+  return <h1>Location Tracking</h1>;
 }
-
