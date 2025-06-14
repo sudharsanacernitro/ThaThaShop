@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  useEffect(() => {
+    // Connect to WebSocket backend
+    const socket = new WebSocket('ws://192.168.1.37:4000'); // replace with your server URL
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    socket.onopen = () => {
+      console.log('✅ WebSocket connected');
+
+      // Start watching location
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          const gpsData = {
+            lat: latitude,
+            lng: longitude,
+            timestamp: Date.now(),
+          };
+
+          // Send to server
+          socket.send(JSON.stringify(gpsData));
+          console.log('📤 Sent:', gpsData);
+        },
+        (error) => {
+          console.error('❌ GPS Error:', error);
+        },
+        {
+          enableHighAccuracy: true,     // for GPS-level precision
+          timeout: 10000,
+          maximumAge: 0,
+        }
+      );
+
+      // Cleanup
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+        socket.close();
+      };
+    };
+  }, []);
+
+  return (<h1>Location Tracking</h1>) // no UI needed
 }
 
-export default App

@@ -1,15 +1,20 @@
-const Redis = require('ioredis');
-const redis = new Redis();
+// streamer.js
+const redis = require('./redisConfig'); // singleton instance
 
-async function writeToStream() {
-  await redis.xadd(
-    'delivery_stream', // Stream name
-    '*',               // Auto-generated ID
-    'agentId', 'agent123',
-    'lat', '11.02',
-    'lng', '77.01',
-    'timestamp', Date.now().toString()
-  );
+async function writeToStream(lat, lon) {
+  try {
+    await redis.xadd(
+      'delivery_stream',
+      '*',
+      'agentId', 'agent123',
+      'lat', lat,
+      'lng', lon,
+      'timestamp', Date.now().toString()
+    );
+    console.log('✅ Stream write successful');
+  } catch (err) {
+    console.error('❌ Redis write error:', err);
+  }
 }
 
-writeToStream();
+module.exports = { writeToStream };
