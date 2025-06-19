@@ -3,12 +3,14 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import {StreamUpdates} from './client';
+import MapView from './map';
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<DeliveryMan />} />
       <Route path="/client" element={<StreamUpdates />} />
+      <Route path="/map" element={<MapView/>} />
     </Routes>
   );
 }
