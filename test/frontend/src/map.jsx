@@ -13,8 +13,8 @@ L.Icon.Default.mergeOptions({
 
 // Custom vehicle icon (e.g., red truck)
 const vehicleIcon = new L.Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854894.png',
-  iconSize: [35, 35],
+  iconUrl: 'https://down-yuantu.pngtree.com/original_origin_pic/19/03/12/bebdc96c76cf45117e8e7903fbcd1ffc.png?e=1750348667&st=ZDUyZDY0ZjQxZDJhYzA0NDdlYzVhYjgwOGFiZGE1NDc&n=%E2%80%94Pngtree%E2%80%94cartoon+large+car+free+map_4446587.png',
+  iconSize: [55, 55],
   iconAnchor: [17, 35],
 });
 
