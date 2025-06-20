@@ -6,6 +6,11 @@ const app = express();
 const cors = require('cors');
 const path=require('path');
 const config = yaml.load(fs.readFileSync('serviceConfig.yaml', 'utf8'));
+
+// for ws proxy
+const http = require('http');
+const server = http.createServer(app);
+
 const logger = require('./logging'); // Your custom logger
 
 const rateLimiter=require("./middlewares/ratelimiter");
@@ -51,7 +56,35 @@ for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
   }
 }
 
+// websocket proxy over express(http)
+
+const { createProxyServer } = require('http-proxy');
+const wsProxy = createProxyServer({ ws: true });
+
+server.on('upgrade', (req, socket, head) => {
+  const pathname = req.url;
+
+  if (pathname.startsWith('/ws/client')) {
+    wsProxy.ws(req, socket, head, { target: 'http://localhost:8080' });
+  }else {
+    socket.destroy(); // Unknown WS path
+  }
+
+  console.log("websocket proxy called");
+
+});
+
+
+
+//testing 
+
+const startWebSocketServer = require('./wsTesting');
+
+// Start the WebSocket server
+startWebSocketServer(8080);
+
+
 const PORT = 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`API Gateway running at http://localhost:${PORT}`);
 });
