@@ -78,10 +78,10 @@ server.on('upgrade', (req, socket, head) => {
 
 //testing 
 
-const startWebSocketServer = require('./wsTesting');
+// const startWebSocketServer = require('./wsTesting');
 
-// Start the WebSocket server
-startWebSocketServer(8080);
+// // Start the WebSocket server
+// startWebSocketServer(8080);
 
 
 const PORT = 5000;
