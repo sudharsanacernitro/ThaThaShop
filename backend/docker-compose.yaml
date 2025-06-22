@@ -151,6 +151,25 @@ services:
       - emailservice
       - productservice
 
+  workerservice:
+    build:
+      context: ./restServices/workerService
+      dockerfile: Dockerfile
+    
+    container_name: thathashop_workerService
+    ports:
+      - "5005:5005"
+
+    depends_on:
+      - kafka
+      - mongodb
+      - vault
+      - redis
+      - loggingservice
+
+
+
+
   
 
 

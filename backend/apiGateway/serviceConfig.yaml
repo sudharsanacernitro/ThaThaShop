@@ -105,3 +105,18 @@ routes:
         route: /order/health
         method: GET
         description: "Endpoint to check the health of the order service"
+
+  worker:
+    port: 5005
+    IP: "workerservice"
+    subServices:
+
+      updateLocation:
+        route: /worker/updateLocation
+        method: POST
+        description: "Enpoint to update location"
+
+      healthCheck:
+        route: /worker/health
+        method: GET
+        description: "Endpoint to check the health"
