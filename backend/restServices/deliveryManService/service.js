@@ -20,6 +20,7 @@ const workernRoutes = require('./routes/orderRoutes');
 app.use('/worker', workerRoutes);
 app.get('/worker/health', (req, res) => res.send('OK'));
 
+const PORT=5005;
 
 async function init() {
   try {
@@ -32,8 +33,8 @@ async function init() {
     console.log('✅ Database connected');
 
     // Step 3: Start your Express app
-    app.listen(5005, () => {
-      console.log('🚀 Auth service running at http://localhost:5004');
+    app.listen( PORT , () => {
+      console.log(`🚀 Auth service running at http://localhost:${PORT}`);
     });
 
   } catch (err) {
