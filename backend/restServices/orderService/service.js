@@ -20,6 +20,7 @@ const prodcutRoutes = require('./routes/orderRoutes');
 app.use('/order', prodcutRoutes);
 app.get('/order/health', (req, res) => res.send('OK'));
 
+const {readStream} =require('./redisStreamer');
 
 async function init() {
   try {
@@ -31,7 +32,10 @@ async function init() {
     await connectDB();
     console.log('✅ Database connected');
 
-    // Step 3: Start your Express app
+    //step 3: read streams from redis streams
+    await readStream('$');
+
+    // Step 4: Start your Express app
     app.listen(5004, () => {
       console.log('🚀 Auth service running at http://localhost:5004');
     });

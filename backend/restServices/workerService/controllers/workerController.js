@@ -5,13 +5,15 @@ exports.updateLocation = async (req, res) => {
 
     try {
 
-      const {lat,lon}=req.data.location;
+      const {lat,lon}=req.body.data.location;
 
-      writeToStream(lat,lon,req.user.id);
+      await writeToStream(lat,lon,req.user.id);
 
       res.sendStatus(200);
       
     } catch (error) {
+
+      console.log(error);
 
       res.sendStatus(500);
       

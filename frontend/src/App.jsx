@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
-import {Product ,Home ,Login, Signup , SubProduct ,Cart , AdminOrdersDashboard} from './pages';
+import {Product ,Home ,Login, Signup , SubProduct ,Cart , AdminOrdersDashboard , LocationSender} from './pages';
 
 import 'swiper/css';
 
@@ -21,6 +21,8 @@ const App=()=> {
         <Route path='/signup' element={<Signup/>} />
         <Route path='/cart' element={<Cart/>} />
         <Route path='/admin' element={<AdminOrdersDashboard/>} />
+        <Route path='/location' element={<LocationSender/>} />
+
 
       </Routes>
      </BrowserRouter>

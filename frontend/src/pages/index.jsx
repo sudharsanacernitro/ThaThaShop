@@ -5,6 +5,7 @@ import Login from './login';
 import Signup from './signup';
 import Cart from './cart';
 import AdminOrdersDashboard from './admin';
+import LocationSender from './location';
 
 export {
   Home,
@@ -13,5 +14,6 @@ export {
   Login,
   Signup,
   Cart,
-  AdminOrdersDashboard
+  AdminOrdersDashboard,
+  LocationSender
 }

@@ -65,7 +65,7 @@ server.on('upgrade', (req, socket, head) => {
   const pathname = req.url;
 
   if (pathname.startsWith('/ws/client')) {
-    wsProxy.ws(req, socket, head, { target: 'http://localhost:8080' });
+    wsProxy.ws(req, socket, head, { target: 'http://orderservice:8080' });
   }else {
     socket.destroy(); // Unknown WS path
   }
