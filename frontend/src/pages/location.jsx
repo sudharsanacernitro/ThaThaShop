@@ -1,39 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const LocationSender = () => {
   const ip = import.meta.env.VITE_API_URL;
   const [lat, setLat] = useState('');
   const [lon, setLon] = useState('');
   const [status, setStatus] = useState('');
+  const [tracking, setTracking] = useState(false);
 
-  const getLocation = () => {
+  const getLocationAndStartTracking = () => {
     if (!navigator.geolocation) {
-      setStatus('❌ Geol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ocation is not supported by your browser');
+      setStatus('❌ Geolocation is not supported by your browser');
       return;
     }
 
-    setStatus('📡 Getting location...');
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setLat(position.coords.latitude);
-        setLon(position.coords.longitude);
-        setStatus('✅ Location acquired!');
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        setStatus(`❌ Error (${error.code}): ${error.message}`);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,     // increased timeout
-        maximumAge: 0       // no cached position
-      }
-    );
+    setStatus('📡 Starting location tracking...');
+    setTracking(true); // start auto-update loop
   };
 
-  const sendLocation = async () => {
+  const sendLocation = async (latitude, longitude) => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout for fetch
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
     try {
       const response = await fetch(`${ip}/worker/updateLocation`, {
@@ -42,8 +28,8 @@ const LocationSender = () => {
         body: JSON.stringify({
           data: {
             location: {
-              lat: parseFloat(lat),
-              lon: parseFloat(lon),
+              lat: latitude,
+              lon: longitude,
             },
           },
         }),
@@ -59,22 +45,50 @@ const LocationSender = () => {
     }
   };
 
+  // 📡 Auto-track and send location every 5 seconds
+  useEffect(() => {
+    let intervalId;
+
+    if (tracking) {
+      intervalId = setInterval(() => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            setLat(latitude);
+            setLon(longitude);
+
+            sendLocation(latitude, longitude); // send updated location
+          },
+          (error) => {
+            console.error('Geolocation error:', error);
+            setStatus(`❌ Error (${error.code}): ${error.message}`);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          }
+        );
+      }, 5000);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [tracking]);
+
   return (
     <div style={{ padding: '1.5rem' }}>
       <h2>📍 GPS Location Sender</h2>
-      <button onClick={getLocation}>📡 Get Current Location</button>
+      <button onClick={getLocationAndStartTracking} disabled={tracking}>
+        📡 Start Location Tracking
+      </button>
       <div style={{ marginTop: '1rem' }}>
         <p>Latitude: {lat}</p>
         <p>Longitude: {lon}</p>
       </div>
-      <button
-        onClick={sendLocation}
-        className="bg-white cursor-pointer"
-        disabled={!lat || !lon}
-        style={{ marginTop: '1rem' }}
-      >
-        🚀 Send Location
-      </button>
       {status && <p style={{ marginTop: '1rem' }}>{status}</p>}
     </div>
   );

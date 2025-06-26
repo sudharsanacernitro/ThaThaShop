@@ -33,7 +33,7 @@ async function init() {
     console.log('✅ Database connected');
 
     //step 3: read streams from redis streams
-    await readStream('$');
+    // await readStream('$');
 
     // Step 4: Start your Express app
     app.listen(5004, () => {
@@ -47,6 +47,8 @@ async function init() {
 }
 
 init();
+readStream('$');
+
 
 
 

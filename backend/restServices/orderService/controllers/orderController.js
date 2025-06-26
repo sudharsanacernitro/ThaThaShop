@@ -2,6 +2,9 @@ const Order = require('../models/orderModel');
 const {logging} = require('../utils/logging');
 const {sendEmailMessage,confirmationEmailTemplate,orderUpdateEmailTemplate} = require('../utils/emailHandler');
 const { json } = require('express');
+const mongoose =require('mongoose');
+
+//user routes - specific for client/user
 
 const placeOrder =  async (req, res) => {
 
@@ -50,6 +53,24 @@ const getOrdersByUserId = async (req, res) => {
     }
   };
 
+  const myOrder = async ( req,res ) =>{
+
+      const userId=req.user.id;
+
+      try{
+
+        const objectId = new mongoose.Types.ObjectId(userId);
+        const results=await Order.find({userId:objectId});
+
+        res.status(200).json(JSON.stringify(results));
+      }
+      catch(err)
+      {
+        console.error("Error occured while get order - route[myorder]",err);
+        res.sendStatus(500);
+      }
+  };
+
 
 // const getByUserId = async (req, res) => {
 //     const {userId} = req.body;
@@ -73,6 +94,9 @@ const getOrdersByUserId = async (req, res) => {
 //             { status: status },
 //             { new: true }
 //         );
+
+
+//Admin routes - only specific for admin
   
 const displayOrder = async (req, res) => {
 
@@ -176,5 +200,6 @@ module.exports = {
     getOrdersByUserId,
     displayOrder,
     updateOrder,
+    myOrder
 
 };
