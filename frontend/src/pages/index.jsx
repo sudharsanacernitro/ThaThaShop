@@ -6,6 +6,7 @@ import Signup from './signup';
 import Cart from './cart';
 import AdminOrdersDashboard from './admin';
 import LocationSender from './location';
+import OrderStatusPage from './orderTracking';
 
 export {
   Home,
@@ -15,5 +16,6 @@ export {
   Signup,
   Cart,
   AdminOrdersDashboard,
-  LocationSender
+  LocationSender,
+  OrderStatusPage
 }

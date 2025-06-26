@@ -17,9 +17,13 @@ const OrderStatusPage = () => {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const res = await fetch(`${apiUrl}/order/status/123`, { credentials: 'include' }); // Replace 123 with actual order ID
-        const data = await res.json();
-        setStatus(data.status);
+        const res = await fetch(`${apiUrl}/order/myorder`, {
+           method:"GET",
+           credentials: 'include'
+           }); // Replace 123 with actual order ID
+        const data = JSON.parse(res);
+        console.log(data);
+        // setStatus(data.status);
       } catch (err) {
         setError('❌ Failed to fetch order status');
         console.error(err);

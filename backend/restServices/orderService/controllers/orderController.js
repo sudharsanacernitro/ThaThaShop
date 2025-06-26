@@ -61,7 +61,8 @@ const getOrdersByUserId = async (req, res) => {
 
         const objectId = new mongoose.Types.ObjectId(userId);
         const results=await Order.find({userId:objectId});
-
+        console.log(results);
+        console.log("myorder page called");
         res.status(200).json(JSON.stringify(results));
       }
       catch(err)
@@ -201,5 +202,4 @@ module.exports = {
     displayOrder,
     updateOrder,
     myOrder
-
 };

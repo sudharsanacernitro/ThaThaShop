@@ -85,6 +85,11 @@ routes:
         route: /order/placeOrder
         method: POST
         description: "Endpoint to place an order"
+      
+      myorder:
+        route: /order/myorder
+        method: GET
+        description: "To get client order"
 
       getOrder:
         route: /order/getOrdersByUserId

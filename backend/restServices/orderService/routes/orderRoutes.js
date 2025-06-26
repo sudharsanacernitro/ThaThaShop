@@ -14,6 +14,6 @@ router.post('/updateOrder', updateOrder);
 // client(user) routes
 
 router.post('/placeOrder', userAuthenticateToken,placeOrder);
-router.post('/myorder',userAuthenticateToken,)
+router.get('/myorder',userAuthenticateToken,myOrder);
 
 module.exports = router;
