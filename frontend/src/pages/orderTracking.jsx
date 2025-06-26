@@ -21,7 +21,7 @@ const OrderStatusPage = () => {
            method:"GET",
            credentials: 'include'
            }); // Replace 123 with actual order ID
-        const data = JSON.parse(res);
+        const data = await res.json();
         console.log(data);
         // setStatus(data.status);
       } catch (err) {

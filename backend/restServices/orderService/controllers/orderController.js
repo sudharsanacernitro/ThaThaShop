@@ -56,19 +56,53 @@ const getOrdersByUserId = async (req, res) => {
   const myOrder = async ( req,res ) =>{
 
       const userId=req.user.id;
+      const token = req.cookies['token']; // get JWT from cookie
 
-      try{
+      if (!token) {
 
-        const objectId = new mongoose.Types.ObjectId(userId);
-        const results=await Order.find({userId:objectId});
-        console.log(results);
-        console.log("myorder page called");
-        res.status(200).json(JSON.stringify(results));
+        logging({ message: `[unauthorized]${email}`,logLevel: 2});
+        return res.status(401).json({ error: 'Authentication token missing' });
       }
-      catch(err)
-      {
-        console.error("Error occured while get order - route[myorder]",err);
-        res.sendStatus(500);
+
+      try {
+        const orderedItems = await Order.find({ userId });
+
+        const enrichedCart = await Promise.all(orderedItems.map(async (item) => {
+          try {
+            const response = await fetch(`http://productservice:5002/product/id/${item.productId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Cookie': `token=${token}` // forward JWT cookie
+              }
+            });
+
+            if (!response.ok) {
+              logging({ message: `[failed]${email} - failed to fetch product details from cart using fetch`,logLevel: 2});
+              throw new Error(`Product service error: ${response.status}`);
+            }
+
+            const { data: product } = await response.json();
+
+            return {
+              ...item.toObject(),
+              product,
+            };
+          } catch (err) {
+
+            logging({ message: `[success]${email} - fetch product details `,logLevel: 0});
+            return {
+              ...item.toObject(),
+              product: null,
+            };
+          }
+        }));
+
+        res.json(enrichedCart);
+      } catch (err) {
+
+        logging({ message: `[failed]${email} - failed to fetch product details `,logLevel: 2});
+        res.status(500).json({ error: 'Failed to fetch cart items', details: err.message });
       }
   };
 
@@ -117,7 +151,19 @@ const displayOrder = async (req, res) => {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
 
-      try {
+    await getProductDetails(res, orderItem, token);
+      
+
+  } catch (err) {
+
+    logging({ message: `[failed] - failed to fetch product details `,logLevel: 2});
+    res.status(500).json({ error: 'Failed to fetch cart items', details: err.message });
+  }
+};
+
+async function  getProductDetails(res, orderItem, token)
+{
+  try {
         const response = await fetch(`http://productservice:5002/product/id/${orderItem.productId}`, {
           method: 'GET',
           headers: {
@@ -142,18 +188,12 @@ const displayOrder = async (req, res) => {
 
         logging({ message: `[success] - fetch product details `,logLevel: 0});
         console.log("Product details:", product,err);
+        
         return res.json({
           product: null,
-      });
+         });
       }
-
-  } catch (err) {
-
-    logging({ message: `[failed] - failed to fetch product details `,logLevel: 2});
-    res.status(500).json({ error: 'Failed to fetch cart items', details: err.message });
-  }
-};
-
+}
 
 const updateOrder = async(req,res) => {
 
