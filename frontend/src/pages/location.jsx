@@ -8,7 +8,7 @@ const LocationSender = () => {
 
   const getLocation = () => {
     if (!navigator.geolocation) {
-      setStatus('❌ Geolocation is not supported by your browser');
+      setStatus('❌ Geol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ocation is not supported by your browser');
       return;
     }
 
