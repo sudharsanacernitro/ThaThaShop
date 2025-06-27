@@ -3,17 +3,19 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+// import truckIcon from '.pngegg.png';
+
 // Remove default marker icon globally
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '',
+  iconRetinaUrl: 'https://backend.localhost/public/pngegg.png',
   iconUrl: '',
   shadowUrl: '',
 });
 
 // Custom vehicle icon (e.g., red truck)
 const vehicleIcon = new L.Icon({
-  iconUrl: 'https://down-yuantu.pngtree.com/original_origin_pic/19/03/12/bebdc96c76cf45117e8e7903fbcd1ffc.png?e=1750348667&st=ZDUyZDY0ZjQxZDJhYzA0NDdlYzVhYjgwOGFiZGE1NDc&n=%E2%80%94Pngtree%E2%80%94cartoon+large+car+free+map_4446587.png',
+  iconUrl: '',
   iconSize: [55, 55],
   iconAnchor: [17, 35],
 });

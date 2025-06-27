@@ -225,6 +225,7 @@ const [deliveryDate, setDeliveryDate] = useState('');
               <option value="pending">Pending</option>
               <option value="processed">Processed</option>
               <option value="delivered">Delivered</option>
+              <option value="shipped"> Shipped</option>
             </select>
 
           </div>
