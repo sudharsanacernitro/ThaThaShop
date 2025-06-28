@@ -3,19 +3,17 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// import truckIcon from '.pngegg.png';
-
 // Remove default marker icon globally
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://backend.localhost/public/pngegg.png',
+  iconRetinaUrl: '',
   iconUrl: '',
   shadowUrl: '',
 });
 
 // Custom vehicle icon (e.g., red truck)
 const vehicleIcon = new L.Icon({
-  iconUrl: '',
+  iconUrl: 'https://backend.localhost/pngegg.png',
   iconSize: [55, 55],
   iconAnchor: [17, 35],
 });

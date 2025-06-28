@@ -29,7 +29,7 @@ require('./utils/secretsLoader');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(rateLimiter); //ratelimiting using redis
+// app.use(rateLimiter); //ratelimiting using redis
 
 // Setup proxy with error logging
 for (const [serviceName, serviceConfig] of Object.entries(config.routes)) {
