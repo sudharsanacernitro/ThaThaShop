@@ -17,8 +17,8 @@ app.use(cookieParser()); // 👈 Add this before your routes
 
 
 const workerRoutes = require('./routes/workerRoutes');
-app.use('/worker', workerRoutes);
-app.get('/worker/health', (req, res) => res.send('OK'));
+app.use('/', workerRoutes);
+app.get('/health', (req, res) => res.send('OK'));
 
 const PORT=5005;
 

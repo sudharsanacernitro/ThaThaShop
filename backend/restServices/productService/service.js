@@ -17,7 +17,7 @@ app.use(cookieParser()); // 👈 Add this before your routes
 
 
 const prodcutRoutes = require('./routes/prodcutRoutes');
-app.use('/product', prodcutRoutes);
+app.use('/', prodcutRoutes);
 app.get('/health', (req, res) => res.send('OK'));
 
 
