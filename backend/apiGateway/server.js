@@ -32,6 +32,23 @@ app.use('/order', createProxyBreakerMiddleware(ORDER_SERVICE_URL));
 app.use('/worker', createProxyBreakerMiddleware(WORKER_SERVICE_URL));
 
 
+const http = require('http');
+const server = http.createServer(app);
+const { createProxyServer } = require('http-proxy');
+const wsProxy = createProxyServer({ ws: true });
+
+server.on('upgrade', (req, socket, head) => {
+  const pathname = req.url;
+
+  if (pathname.startsWith('/ws/client')) {
+    wsProxy.ws(req, socket, head, { target: 'http://orderservice:8080' });
+  }else {
+    socket.destroy(); // Unknown WS path
+  }
+
+  console.log("websocket proxy called");
+
+});
 
 
 
