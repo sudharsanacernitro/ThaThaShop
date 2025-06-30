@@ -102,7 +102,7 @@ const OrderStatusPage = () => {
       <div className="w-1/2">
         {selectedOrder ? (
           <div className="bg-white p-4 rounded-lg shadow h-full">
-            <h3 className="text-lg font-bold mb-2 text-gray-700">🗺️ Live Tracking</h3>
+            <h3 className="text-lg font-bold mb-2 text-gray-700">🗺️ Order Tracking</h3>
             <MovingVehicleMap />
           </div>
         ): (

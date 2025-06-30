@@ -2,3 +2,32 @@
 {"level":"error","message":"Something went wrong!","timestamp":"2025-05-01T14:47:50.182Z"}
 {"level":"info","message":"Server started successfully","timestamp":"2025-05-01T20:51:14.224Z"}
 {"level":"error","message":"Something went wrong!","timestamp":"2025-05-01T20:51:14.226Z"}
+{"level":"info","message":"Configuring routes for service: auth at http://authservice:5001","timestamp":"2025-06-30T00:41:14.144Z"}
+{"level":"info","message":"  - Registering route /auth/login [POST] for auth","timestamp":"2025-06-30T00:41:14.147Z"}
+{"level":"info","message":"  - Registering route /auth/register [POST] for auth","timestamp":"2025-06-30T00:41:14.153Z"}
+{"level":"info","message":"  - Registering route /auth/logout [POST] for auth","timestamp":"2025-06-30T00:41:14.154Z"}
+{"level":"info","message":"  - Registering route /auth/refresh [POST] for auth","timestamp":"2025-06-30T00:41:14.156Z"}
+{"level":"info","message":"  - Registering route /auth/verify [POST] for auth","timestamp":"2025-06-30T00:41:14.157Z"}
+{"level":"info","message":"  - Registering route /auth/forgotPassword [POST] for auth","timestamp":"2025-06-30T00:41:14.157Z"}
+{"level":"info","message":"  - Registering route /auth/resetPassword [POST] for auth","timestamp":"2025-06-30T00:41:14.158Z"}
+{"level":"info","message":"  - Registering route /auth/verifyEmail/:userId [GET] for auth","timestamp":"2025-06-30T00:41:14.158Z"}
+{"level":"info","message":"Configuring routes for service: product at http://productservice:5002","timestamp":"2025-06-30T00:41:14.160Z"}
+{"level":"info","message":"  - Registering route /product/list [POST] for product","timestamp":"2025-06-30T00:41:14.160Z"}
+{"level":"info","message":"  - Registering route /product/id/:id [GET] for product","timestamp":"2025-06-30T00:41:14.161Z"}
+{"level":"info","message":"Configuring routes for service: cart at http://cartservice:5003","timestamp":"2025-06-30T00:41:14.161Z"}
+{"level":"info","message":"  - Registering route /cart/add [POST] for cart","timestamp":"2025-06-30T00:41:14.162Z"}
+{"level":"info","message":"  - Registering route /cart/del [POST] for cart","timestamp":"2025-06-30T00:41:14.162Z"}
+{"level":"info","message":"  - Registering route /cart/list [GET] for cart","timestamp":"2025-06-30T00:41:14.163Z"}
+{"level":"info","message":"Configuring routes for service: order at http://orderservice:5004","timestamp":"2025-06-30T00:41:14.163Z"}
+{"level":"info","message":"  - Registering route /order/placeOrder [POST] for order","timestamp":"2025-06-30T00:41:14.163Z"}
+{"level":"info","message":"  - Registering route /order/myorder [GET] for order","timestamp":"2025-06-30T00:41:14.163Z"}
+{"level":"info","message":"  - Registering route /order/getOrdersByUserId [GET] for order","timestamp":"2025-06-30T00:41:14.164Z"}
+{"level":"info","message":"  - Registering route /order/displayOrder [POST] for order","timestamp":"2025-06-30T00:41:14.164Z"}
+{"level":"info","message":"  - Registering route /order/updateOrder [POST] for order","timestamp":"2025-06-30T00:41:14.164Z"}
+{"level":"info","message":"  - Registering route /order/health [GET] for order","timestamp":"2025-06-30T00:41:14.164Z"}
+{"level":"info","message":"Configuring routes for service: worker at http://workerservice:5005","timestamp":"2025-06-30T00:41:14.165Z"}
+{"level":"info","message":"  - Registering route /worker/updateLocation [POST] for worker","timestamp":"2025-06-30T00:41:14.165Z"}
+{"level":"info","message":"  - Registering route /worker/health [GET] for worker","timestamp":"2025-06-30T00:41:14.166Z"}
+{"level":"info","message":"API Gateway running at http://localhost:5000","timestamp":"2025-06-30T00:41:14.177Z"}
+{"level":"info","message":"Loaded configuration from /home/sudharsan/projects/ThaThaShop/backend/apiGateway/serviceConfig.yaml","timestamp":"2025-06-30T00:41:14.177Z"}
+{"level":"info","message":"SIGINT signal received: Closing HTTP server","timestamp":"2025-06-30T00:41:17.893Z"}
