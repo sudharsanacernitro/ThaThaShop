@@ -16,8 +16,8 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser()); // 👈 Add this before your routes
 
 const cartRoutes = require('./routes/cartRoutes');
-app.use('/', cartRoutes);
-app.get('/health', (req, res) => res.send('OK'));
+app.use('/cart', cartRoutes);
+app.get('/cart/health', (req, res) => res.send('OK'));
 
 
 

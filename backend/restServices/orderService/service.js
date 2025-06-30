@@ -17,8 +17,8 @@ app.use(cookieParser()); // 👈 Add this before your routes
 
 
 const prodcutRoutes = require('./routes/orderRoutes');
-app.use('/', prodcutRoutes);
-app.get('/health', (req, res) => res.send('OK'));
+app.use('/order', prodcutRoutes);
+app.get('/order/health', (req, res) => res.send('OK'));
 
 const {readStream} =require('./redisStreamer');
 
