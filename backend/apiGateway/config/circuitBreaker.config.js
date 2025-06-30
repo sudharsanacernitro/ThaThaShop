@@ -1,13 +1,8 @@
 const DEFAULT_CIRCUIT_BREAKER_OPTIONS = {
-    timeout: 10000,
-    errorThresholdPercentage: 50,
-    volumeThreshold: 10,
-    // resetTimeout: function (failureCount) {
-    //     const baseTimeout = 5000;
-    //     const maxTimeout = 60000;
-    //     const calculatedTimeout = baseTimeout * Math.pow(2, failureCount - 1);
-    //     return Math.min(calculatedTimeout, maxTimeout);
-    // }
+    timeout: 10000,                 // Timeout per request
+    errorThresholdPercentage: 50,  // % of failures before opening
+    volumeThreshold: 10,           // # of requests before enabling breaker
+    resetTimeout: 5000             // 5 seconds before retrying (static)
 };
 
-module.exports={DEFAULT_CIRCUIT_BREAKER_OPTIONS};
+module.exports = { DEFAULT_CIRCUIT_BREAKER_OPTIONS };

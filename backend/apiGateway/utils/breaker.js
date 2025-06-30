@@ -17,7 +17,6 @@ function createProxyBreakerMiddleware(targetUrl, pathRewriteRules = {}, breakerO
             target: targetUrl,
             changeOrigin: true,
             pathRewrite: pathRewriteRules,
-            // selfHandleResponse: true,
             logLevel: 'debug',
 
             onProxyRes: (proxyRes, req, res) => {
@@ -77,8 +76,9 @@ function createProxyBreakerMiddleware(targetUrl, pathRewriteRules = {}, breakerO
                         if (err) {
                             console.error(`[ProxyMiddlewareInstance Error] ${err.message}`);
                             reject(err);
+                        } else {
+                            resolve(); // Success if no error
                         }
-                        return resolve(); // success if no error
                     });
 
                     req.on('error', reject);
@@ -92,10 +92,29 @@ function createProxyBreakerMiddleware(targetUrl, pathRewriteRules = {}, breakerO
 
         breaker = new CircuitBreaker(proxyOperation, mergedOptions);
 
-        // Circuit breaker event logs
-        breaker.on('open', () => console.warn(`🚨 Circuit Breaker OPEN for ${targetUrl}!`));
+        // ----------------------------
+        // Exponential Backoff Handling
+        // ----------------------------
+        let failureCount = 0;
+        const baseResetTimeout = 5000;
+        const maxResetTimeout = 60000;
+
+        breaker.on('open', () => {
+            failureCount++;
+            const newResetTimeout = Math.min(baseResetTimeout * Math.pow(2, failureCount - 1), maxResetTimeout);
+            breaker.options.resetTimeout = newResetTimeout;
+
+            console.warn(`🚨 Circuit Breaker OPEN for ${targetUrl}! Backoff = ${newResetTimeout}ms`);
+        });
+
+        breaker.on('close', () => {
+            console.info(`✅ Circuit Breaker CLOSED for ${targetUrl}. Resetting failure count.`);
+            failureCount = 0;
+            breaker.options.resetTimeout = baseResetTimeout;
+        });
+
+        // Logging other breaker events
         breaker.on('halfOpen', () => console.info(`🟡 Circuit Breaker HALF_OPEN for ${targetUrl}. Testing...`));
-        breaker.on('close', () => console.info(`✅ Circuit Breaker CLOSED for ${targetUrl}. Service recovered.`));
         breaker.on('fire', () => console.log(`🔥 Firing breaker for ${targetUrl}.`));
         breaker.on('success', () => console.log(`✨ Success via breaker for ${targetUrl}.`));
         breaker.on('reject', (err) => console.error(`❌ Breaker REJECTED for ${targetUrl}: ${err.message}`));
@@ -107,7 +126,7 @@ function createProxyBreakerMiddleware(targetUrl, pathRewriteRules = {}, breakerO
 
     return async (req, res) => {
         try {
-            await breaker.fire(req, res); // don't pass next
+            await breaker.fire(req, res);
         } catch (err) {
             console.error(`[CircuitBreaker Catch] Request to ${targetUrl} failed: ${err.message}`);
             if (!res.headersSent) {
